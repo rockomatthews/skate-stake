@@ -3,7 +3,7 @@ import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 
 function SignUpModal({ isOpen, onClose }) {
   const [email, setEmail] = useState('');
-  const [referenceId, setReferenceId] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleSignUp = async (event) => {
     event.preventDefault(); // Prevent default form submission behavior
@@ -14,7 +14,7 @@ function SignUpModal({ isOpen, onClose }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ referenceId, email }),
+        body: JSON.stringify({ email, password }), // Send only email and password
       });
 
       const data = await response.json();
@@ -48,13 +48,13 @@ function SignUpModal({ isOpen, onClose }) {
             margin="normal"
             required
             fullWidth
-            name="referenceId"
-            label="Reference ID"
-            type="text"
-            id="referenceId"
-            autoComplete="reference-id"
-            value={referenceId}
-            onChange={(e) => setReferenceId(e.target.value)}
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             Sign Up

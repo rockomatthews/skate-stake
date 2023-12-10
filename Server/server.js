@@ -1,5 +1,7 @@
 const express = require('express');
+const axios = require('axios');
 const cors = require('cors');
+const { v4: uuidv4 } = require('uuid'); // Import UUID generator
 
 const app = express();
 
@@ -7,22 +9,35 @@ const app = express();
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json()); // Parse JSON request bodies
 
-// Initialize the GameShift API
-const sdk = require('api')('@gameshift/v1.0#ffmg2jlpwuu3b4');
-
 // Environment variables
 const PORT = process.env.PORT || 3001;
+const GAMESHIFT_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiI0MDVkYzlhYi03YWU5LTQ0NzQtOGUxYy03Mjg3YWNhMWNhZmEiLCJzdWIiOiJkOWEwMTRhNy1kNDIwLTRkZWUtODdjNS1jNmFjZDljMmFjZWQiLCJpYXQiOjE3MDE3MjUzMTF9.i9YuYTvZ-_d8MnOgxNQWFQM12unJNnLDfSG5GSvrqBU'; 
+const GAMESHIFT_API_URL = 'https://api.gameshift.dev/users';
 
 // User registration endpoint
-app.post('/register', (req, res) => {
-  const { referenceId, email } = req.body;
+app.post('/register', async (req, res) => {
+  const { email, password } = req.body; // Removed referenceId from request body
+  const referenceId = uuidv4(); // Generate a unique referenceId
 
-  sdk.projectUserController_create({ referenceId, email })
-    .then(({ data }) => res.json(data))
-    .catch(err => {
-      console.error('Error in /register:', err);
-      res.status(500).json({ error: err.message });
+  try {
+    const response = await axios.post(GAMESHIFT_API_URL, {
+      referenceId,
+      email,
+      password
+      // You can include password or other fields if required by your API
+    }, {
+      headers: {
+        'accept': 'application/json',
+        'content-type': 'application/json',
+        'x-api-key': GAMESHIFT_API_KEY
+      }
     });
+
+    res.json({ ...response.data, referenceId }); // Include referenceId in the response
+  } catch (error) {
+    console.error('Error in /register:', error);
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // Start the server
