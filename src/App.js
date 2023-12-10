@@ -1,11 +1,17 @@
 import Header from './components/Header'
-import './App.css';
+import { AuthProvider } from './AuthContext';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './Theme';
 
 function App() {
   return (
-    <div className="App">
-      <Header />
-    </div>
+    <ThemeProvider theme={theme}>
+      <AuthProvider>
+        <div className="App">
+          <Header />
+        </div>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

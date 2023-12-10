@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
+import { useAuth } from '../AuthContext';
+
 
 function SignUpModal({ isOpen, onClose }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-
+  const { login } = useAuth(); // Use the login function
 
   const handleSignUp = async (event) => {
     event.preventDefault();
@@ -28,7 +29,7 @@ function SignUpModal({ isOpen, onClose }) {
         setSuccessMessage('Registration successful!');
         setEmail('');
         setPassword('');
-        // Optionally redirect the user or perform other actions
+        login(); 
       } else {
         setErrorMessage(`Registration failed: ${data.error}`);
       }

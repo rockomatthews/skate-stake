@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import SignUpModal from './SignUpModal'; 
+import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, Button } from '@mui/material';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import SignUpModal from './SignUpModal'; // Import SignUpModal
+import { useAuth } from '../AuthContext'; // Import useAuth
 
 function Header() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isLoggedIn, logout } = useAuth();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for SignUpModal
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -20,23 +27,33 @@ function Header() {
 
   return (
     <AppBar position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Typography
+      <Toolbar>
+        <Typography
             variant="h6"
             noWrap
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}
           >
             Stake Skate
-          </Typography>
-          <Box sx={{ flexGrow: 0 }}>
-            <Button color="inherit" onClick={handleOpenModal}>
-              Sign Up
-            </Button>
-          </Box>
-        </Toolbar>
-      </Container>
+        </Typography>
+        {isLoggedIn ? (
+          <div>
+            <IconButton onClick={handleMenu} color="inherit">
+              <AccountCircle />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleClose}>Account</MenuItem>
+              <MenuItem onClick={() => { handleClose(); logout(); }}>Logout</MenuItem>
+            </Menu>
+          </div>
+        ) : (
+          <Button color="inherit" onClick={handleOpenModal}>Sign Up</Button>
+        )}
+      </Toolbar>
       <SignUpModal isOpen={isModalOpen} onClose={handleCloseModal} />
     </AppBar>
   );
