@@ -5,8 +5,14 @@ function SignUpModal({ isOpen, onClose }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+
   const handleSignUp = async (event) => {
-    event.preventDefault(); // Prevent default form submission behavior
+    event.preventDefault();
+    setSuccessMessage('');
+    setErrorMessage('');
 
     try {
       const response = await fetch('http://localhost:3001/register', {
@@ -18,12 +24,16 @@ function SignUpModal({ isOpen, onClose }) {
       });
 
       const data = await response.json();
-      console.log('Registration successful:', data);
-      onClose(); // Close the modal on successful registration
-      // Additional success handling here
+      if (response.ok) {
+        setSuccessMessage('Registration successful!');
+        setEmail('');
+        setPassword('');
+        // Optionally redirect the user or perform other actions
+      } else {
+        setErrorMessage(`Registration failed: ${data.error}`);
+      }
     } catch (error) {
-      console.error('Registration error:', error);
-      // Error handling here
+      setErrorMessage(`Registration error: ${error.message}`);
     }
   };
 
@@ -59,7 +69,8 @@ function SignUpModal({ isOpen, onClose }) {
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             Sign Up
           </Button>
-          {/* Include other sign-up options if needed */}
+            {successMessage && <Typography color="green">{successMessage}</Typography>}
+            {errorMessage && <Typography color="red">{errorMessage}</Typography>}
         </Box>
       </Box>
     </Modal>
