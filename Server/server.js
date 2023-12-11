@@ -11,20 +11,18 @@ app.use(express.json()); // Parse JSON request bodies
 
 // Environment variables
 const PORT = process.env.PORT || 3001;
-const GAMESHIFT_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiI0MDVkYzlhYi03YWU5LTQ0NzQtOGUxYy03Mjg3YWNhMWNhZmEiLCJzdWIiOiJkOWEwMTRhNy1kNDIwLTRkZWUtODdjNS1jNmFjZDljMmFjZWQiLCJpYXQiOjE3MDE3MjUzMTF9.i9YuYTvZ-_d8MnOgxNQWFQM12unJNnLDfSG5GSvrqBU'; 
+const GAMESHIFT_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiI0MDVkYzlhYi03YWU5LTQ0NzQtOGUxYy03Mjg3YWNhMWNhZmEiLCJzdWIiOiJkOWEwMTRhNy1kNDIwLTRkZWUtODdjNS1jNmFjZDljMmFjZWQiLCJpYXQiOjE3MDE3MjUzMTF9.i9YuYTvZ-_d8MnOgxNQWFQM12unJNnLDfSG5GSvrqBU'; // Replace with your actual GameShift API key
 const GAMESHIFT_API_URL = 'https://api.gameshift.dev/users';
 
 // User registration endpoint
 app.post('/register', async (req, res) => {
-  const { email, password } = req.body; // Removed referenceId from request body
+  const { email } = req.body; // Only get email from the request body
   const referenceId = uuidv4(); // Generate a unique referenceId
 
   try {
     const response = await axios.post(GAMESHIFT_API_URL, {
       referenceId,
-      email,
-      password
-      // You can include password or other fields if required by your API
+      email
     }, {
       headers: {
         'accept': 'application/json',
@@ -33,7 +31,7 @@ app.post('/register', async (req, res) => {
       }
     });
 
-    res.json({ ...response.data, referenceId }); // Include referenceId in the response
+    res.json({ ...response.data, referenceId });
   } catch (error) {
     console.error('Error in /register:', error);
     res.status(500).json({ error: error.message });

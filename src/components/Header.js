@@ -34,7 +34,7 @@ function Header() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}
           >
-            Stake Skate
+            SKATE STAKE
         </Typography>
         {isLoggedIn ? (
           <div>
