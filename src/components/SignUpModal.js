@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
-import { auth } from '../firebase'; // Adjust the path as necessary
+import { auth } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { db } from '../firebase'; // Adjust the path based on your project structure
+import { v4 as uuidv4 } from 'uuid'; // For generating unique IDs
 
 function SignUpModal({ isOpen, onClose }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleSignUp = async (event) => {
@@ -16,24 +15,34 @@ function SignUpModal({ isOpen, onClose }) {
       setErrorMessage('Email and password are required');
       return;
     }
-    setSuccessMessage('');
     setErrorMessage('');
 
     try {
-      // Create a new user with Firebase Authentication
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(auth, email, password);
+      const referenceId = uuidv4(); // Generate a unique reference ID
 
-      const user = userCredential.user;
-
-      // Optionally store additional user information in Firestore
-      await db.firestore().collection('users').doc(user.uid).set({
-        email: email,
-        createdAt: new Date() // Store the creation date
+      // Make a POST request to GameShift's API
+      const response = await fetch('https://api.gameshift.dev/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'accept': 'application/json',
+          'x-api-key': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiI0MDVkYzlhYi03YWU5LTQ0NzQtOGUxYy03Mjg3YWNhMWNhZmEiLCJzdWIiOiJkOWEwMTRhNy1kNDIwLTRkZWUtODdjNS1jNmFjZDljMmFjZWQiLCJpYXQiOjE3MDE3MjUzMTF9.i9YuYTvZ-_d8MnOgxNQWFQM12unJNnLDfSG5GSvrqBU'
+        },
+        body: JSON.stringify({
+          referenceId: referenceId,
+          email: email
+        })
       });
 
-      setSuccessMessage('Registration successful!');
-      setEmail('');
-      setPassword('');
+      if (!response.ok) {
+        throw new Error('GameShift registration failed');
+      }
+
+      // Handle response from GameShift
+      const gameShiftData = await response.json();
+      console.log('GameShift registration successful:', gameShiftData);
+
       onClose(); // Close the modal
     } catch (error) {
       setErrorMessage(`Registration error: ${error.message}`);
@@ -42,51 +51,51 @@ function SignUpModal({ isOpen, onClose }) {
 
   return (
     <Modal open={isOpen} onClose={onClose}>
-      <Box sx={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: { xs: '90%', sm: '400px' },
-        bgcolor: 'background.paper',
-        boxShadow: 24,
-        p: 4,
-        borderRadius: 2,
-      }}>
-        <Typography variant="h6">Sign Up</Typography>
-        <Box component="form" onSubmit={handleSignUp} noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            Sign Up
-          </Button>
-          {successMessage && <Typography color="green">{successMessage}</Typography>}
-          {errorMessage && <Typography color="red">{errorMessage}</Typography>}
-        </Box>
+    <Box sx={{
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: { xs: '90%', sm: '400px' },
+      bgcolor: 'background.paper',
+      boxShadow: 24,
+      p: 4,
+      borderRadius: 2,
+    }}>
+      <Typography variant="h6">Sign Up</Typography>
+      <Box component="form" onSubmit={handleSignUp} noValidate sx={{ mt: 1 }}>
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          id="email"
+          label="Email Address"
+          name="email"
+          autoComplete="email"
+          autoFocus
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          name="password"
+          label="Password"
+          type="password"
+          id="password"
+          autoComplete="current-password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+          Sign Up
+        </Button>
+        {/* {successMessage && <Typography color="green">{successMessage}</Typography>} */}
+        {errorMessage && <Typography color="red">{errorMessage}</Typography>}
       </Box>
-    </Modal>
+    </Box>
+  </Modal>
   );
 }
 
