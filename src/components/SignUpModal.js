@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
-import firebase from './firebase'; // Adjust the path based on your project structure
+import firebase from '../firebase'; // Adjust the path based on your project structure
 
 function SignUpModal({ isOpen, onClose }) {
   const [email, setEmail] = useState('');
