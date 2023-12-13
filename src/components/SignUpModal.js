@@ -22,6 +22,7 @@ function SignUpModal({ isOpen, onClose }) {
     try {
       // Create a new user with Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
       const user = userCredential.user;
 
       // Optionally store additional user information in Firestore
