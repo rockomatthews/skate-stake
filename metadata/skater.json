@@ -1,0 +1,23 @@
+{
+    "name": "Skilled Skater",
+    "symbol": "SK8",
+    "description": "A skater known for their confident attitude.",
+    "seller_fee_basis_points": 500, // Represents a 5.00% seller fee.
+    "image": "https://example.com/skilled-skater.png",
+    "attributes": [
+      {
+        "trait_type": "Attitude",
+        "value": "Confident"
+      },
+      {
+        "trait_type": "Kickflip Success Rate",
+        "value": "80%"
+      },
+      {
+        "trait_type": "Healflip Success Rate",
+        "value": "40%"
+      }
+    ],
+    // ... other metadata properties
+  }
+  
