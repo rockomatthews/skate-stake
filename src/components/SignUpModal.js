@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
-import firebase from '../firebase'; // Adjust the path based on your project structure
+import { auth } from '../firebase'; // Adjust the path as necessary
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { db } from '../firebase'; // Adjust the path based on your project structure
 
 function SignUpModal({ isOpen, onClose }) {
   const [email, setEmail] = useState('');
@@ -19,11 +21,11 @@ function SignUpModal({ isOpen, onClose }) {
 
     try {
       // Create a new user with Firebase Authentication
-      const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
       // Optionally store additional user information in Firestore
-      await firebase.firestore().collection('users').doc(user.uid).set({
+      await db.firestore().collection('users').doc(user.uid).set({
         email: email,
         createdAt: new Date() // Store the creation date
       });

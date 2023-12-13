@@ -1,23 +1,86 @@
-{
-    "name": "Skilled Skater",
-    "symbol": "SK8",
-    "description": "A skater known for their confident attitude.",
-    "seller_fee_basis_points": 500, // Represents a 5.00% seller fee.
-    "image": "https://example.com/skilled-skater.png",
+  {
+    "id": "6ba6e801-258c-4d5d-86b9-4f65c522bb1c",
+    "name": "Skater",
+    "description": "Detailed skater attributes for gameplay",
+    "sourceImage": "https://example.com/path/to/skater-image.png",
     "attributes": [
       {
-        "trait_type": "Attitude",
+        "trait_type": "General Attitude",
         "value": "Confident"
       },
       {
-        "trait_type": "Kickflip Success Rate",
-        "value": "80%"
+        "trait_type": "Adrenaline Boost",
+        "value": "90%"
       },
       {
-        "trait_type": "Healflip Success Rate",
-        "value": "40%"
+        "trait_type": "Skill Level",
+        "value": "Advanced"
+      },
+      {
+        "trait_type": "Stamina",
+        "value": "High"
+      },
+      {
+        "trait_type": "Focus",
+        "value": "Sharp"
+      },
+      {
+        "category": "Flips",
+        "traits": [
+          {
+            "trait_type": "Backflip Success Rate",
+            "value": "85%"
+          },
+          {
+            "trait_type": "Frontflip Success Rate",
+            "value": "80%"
+          }
+          // ... other flip tricks
+        ]
+      },
+      {
+        "category": "Spins",
+        "traits": [
+          {
+            "trait_type": "360 Spin Success Rate",
+            "value": "75%"
+          },
+          {
+            "trait_type": "720 Spin Success Rate",
+            "value": "65%"
+          }
+          // ... other spin tricks
+        ]
+      },
+      {
+        "category": "Board Flips",
+        "traits": [
+          {
+            "trait_type": "Kickflip Success Rate",
+            "value": "80%"
+          },
+          {
+            "trait_type": "Heelflip Success Rate",
+            "value": "70%"
+          }
+          // ... other board flip tricks
+        ]
+      },
+      {
+        "category": "Grabs",
+        "traits": [
+          {
+            "trait_type": "Nosegrab Success Rate",
+            "value": "85%"
+          },
+          {
+            "trait_type": "Tailgrab Success Rate",
+            "value": "82%"
+          }
+          // ... other grab tricks
+        ]
       }
-    ],
-    // ... other metadata properties
+      // ... additional categories and traits as needed
+    ]
   }
   
