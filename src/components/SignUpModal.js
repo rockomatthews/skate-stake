@@ -1,41 +1,37 @@
 import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
-import { useAuth } from '../AuthContext';
-
+import firebase from './firebase'; // Adjust the path based on your project structure
 
 function SignUpModal({ isOpen, onClose }) {
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const { login } = useAuth(); // Use the login function
-    
 
   const handleSignUp = async (event) => {
-      event.preventDefault();
-      if (!email ) {
-        setErrorMessage('');
-        return;
-      }
-      setSuccessMessage('');
-    
+    event.preventDefault();
+    if (!email || !password) {
+      setErrorMessage('Email and password are required');
+      return;
+    }
+    setSuccessMessage('');
+    setErrorMessage('');
+
     try {
-      const response = await fetch('http://localhost:3001/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }), // Send only email
+      // Create a new user with Firebase Authentication
+      const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+
+      // Optionally store additional user information in Firestore
+      await firebase.firestore().collection('users').doc(user.uid).set({
+        email: email,
+        createdAt: new Date() // Store the creation date
       });
 
-      const data = await response.json();
-      console.log(data);
-      if (response.ok) {
-        setSuccessMessage('Registration successful!');
-        setEmail('');
-        login(); 
-      } else {
-        setErrorMessage(`Registration failed: ${data.error}`);
-      }
+      setSuccessMessage('Registration successful!');
+      setEmail('');
+      setPassword('');
+      onClose(); // Close the modal
     } catch (error) {
       setErrorMessage(`Registration error: ${error.message}`);
     }
@@ -48,11 +44,11 @@ function SignUpModal({ isOpen, onClose }) {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: { xs: '90%', sm: '400px' }, // Responsive width
+        width: { xs: '90%', sm: '400px' },
         bgcolor: 'background.paper',
         boxShadow: 24,
-        p: 4, // Padding around the content
-        borderRadius: 2, // Optional: for rounded corners
+        p: 4,
+        borderRadius: 2,
       }}>
         <Typography variant="h6">Sign Up</Typography>
         <Box component="form" onSubmit={handleSignUp} noValidate sx={{ mt: 1 }}>
@@ -68,11 +64,23 @@ function SignUpModal({ isOpen, onClose }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             Sign Up
           </Button>
-            {successMessage && <Typography color="green">{successMessage}</Typography>}
-            {errorMessage && <Typography color="red">{errorMessage}</Typography>}
+          {successMessage && <Typography color="green">{successMessage}</Typography>}
+          {errorMessage && <Typography color="red">{errorMessage}</Typography>}
         </Box>
       </Box>
     </Modal>
