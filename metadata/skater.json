@@ -35,7 +35,6 @@
             "trait_type": "Frontflip Success Rate",
             "value": "80%"
           }
-          // ... other flip tricks
         ]
       },
       {
@@ -49,7 +48,6 @@
             "trait_type": "720 Spin Success Rate",
             "value": "65%"
           }
-          // ... other spin tricks
         ]
       },
       {
@@ -63,7 +61,6 @@
             "trait_type": "Heelflip Success Rate",
             "value": "70%"
           }
-          // ... other board flip tricks
         ]
       },
       {
@@ -77,10 +74,8 @@
             "trait_type": "Tailgrab Success Rate",
             "value": "82%"
           }
-          // ... other grab tricks
         ]
       }
-      // ... additional categories and traits as needed
     ]
   }
   

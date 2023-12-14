@@ -3,11 +3,14 @@ import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 import { auth } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { v4 as uuidv4 } from 'uuid'; // For generating unique IDs
+import { useAuth } from '../AuthContext';
+
 
 function SignUpModal({ isOpen, onClose }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const { login } = useAuth();
 
   const handleSignUp = async (event) => {
     event.preventDefault();
@@ -42,7 +45,7 @@ function SignUpModal({ isOpen, onClose }) {
       // Handle response from GameShift
       const gameShiftData = await response.json();
       console.log('GameShift registration successful:', gameShiftData);
-
+      login()
       onClose(); // Close the modal
     } catch (error) {
       setErrorMessage(`Registration error: ${error.message}`);

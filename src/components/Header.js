@@ -5,7 +5,7 @@ import SignUpModal from './SignUpModal'; // Import SignUpModal
 import { useAuth } from '../AuthContext'; // Import useAuth
 
 function Header() {
-  const { isLoggedIn, logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth(); // Use isAuthenticated and logout from AuthContext
   const [anchorEl, setAnchorEl] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // State for SignUpModal
 
@@ -29,14 +29,14 @@ function Header() {
     <AppBar position="static">
       <Toolbar>
         <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}
-          >
-            SKATE STAKE
+          variant="h6"
+          noWrap
+          component="div"
+          sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}
+        >
+          SKATE STAKE
         </Typography>
-        {isLoggedIn ? (
+        {isAuthenticated ? (
           <div>
             <IconButton onClick={handleMenu} color="inherit">
               <AccountCircle />
