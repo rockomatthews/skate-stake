@@ -4,6 +4,8 @@ import { auth } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { v4 as uuidv4 } from 'uuid'; // For generating unique IDs
 import { useAuth } from '../AuthContext';
+import { db } from '../firebase';
+import { collection, addDoc } from 'firebase/firestore';
 
 
 function SignUpModal({ isOpen, onClose }) {
@@ -21,6 +23,10 @@ function SignUpModal({ isOpen, onClose }) {
     setErrorMessage('');
 
     try {
+      await addDoc(collection(db, 'users'), {
+        email: email,
+        createdAt: new Date()
+      });
       await createUserWithEmailAndPassword(auth, email, password);
       const referenceId = uuidv4(); // Generate a unique reference ID
 
