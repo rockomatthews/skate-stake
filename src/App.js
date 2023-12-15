@@ -1,6 +1,6 @@
-import Header from './components/Header'
 import { AuthProvider } from './AuthContext';
 import { ThemeProvider } from '@mui/material/styles';
+import Header from './components/Header'
 import theme from './Theme';
 
 function App() {

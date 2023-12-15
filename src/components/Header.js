@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, Button } from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import SignUpModal from './SignUpModal'; // Import SignUpModal
+import SignInModal from './SignInModal'; // Import SignInModal
 import { useAuth } from '../AuthContext'; // Import useAuth
 
 function Header() {
   const { isAuthenticated, logout } = useAuth(); // Use isAuthenticated and logout from AuthContext
   const [anchorEl, setAnchorEl] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for SignUpModal
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false); // State for SignUpModal
+  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false); // State for SignInModal
+  
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -17,12 +20,20 @@ function Header() {
     setAnchorEl(null);
   };
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
+  const handleOpenSignUpModal = () => {
+    setIsSignUpModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleCloseSignUpModal = () => {
+    setIsSignUpModalOpen(false);
+  };
+
+  const handleOpenSignInModal = () => {
+    setIsSignInModalOpen(true);
+  };
+
+  const handleCloseSignInModal = () => {
+    setIsSignInModalOpen(false);
   };
 
   return (
@@ -51,10 +62,14 @@ function Header() {
             </Menu>
           </div>
         ) : (
-          <Button color="inherit" onClick={handleOpenModal}>Sign Up</Button>
+          <>
+            <Button color="inherit" onClick={handleOpenSignUpModal}>Sign Up</Button>
+            <Button color="inherit" onClick={handleOpenSignInModal}>Sign In</Button>
+          </>
         )}
       </Toolbar>
-      <SignUpModal isOpen={isModalOpen} onClose={handleCloseModal} />
+      <SignUpModal isOpen={isSignUpModalOpen} onClose={handleCloseSignUpModal} />
+      <SignInModal isOpen={isSignInModalOpen} onClose={handleCloseSignInModal} />
     </AppBar>
   );
 }
