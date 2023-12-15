@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 import { auth } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { v4 as uuidv4 } from 'uuid'; // For generating unique IDs
+import { v4 as uuidv4 } from 'uuid';
 import { useAuth } from '../AuthContext';
 import { db } from '../firebase';
 import { collection, addDoc } from 'firebase/firestore';
-
 
 function SignUpModal({ isOpen, onClose }) {
   const [email, setEmail] = useState('');
@@ -23,14 +22,15 @@ function SignUpModal({ isOpen, onClose }) {
     setErrorMessage('');
 
     try {
-      await addDoc(collection(db, 'users'), {
-        email: email,
-        createdAt: new Date()
-      });
       await createUserWithEmailAndPassword(auth, email, password);
       const referenceId = uuidv4(); // Generate a unique reference ID
 
-      // Make a POST request to GameShift's API
+      await addDoc(collection(db, 'users'), {
+        email: email,
+        createdAt: new Date(),
+        referenceId: referenceId
+      });
+
       const response = await fetch('https://api.gameshift.dev/users', {
         method: 'POST',
         headers: {
@@ -38,20 +38,16 @@ function SignUpModal({ isOpen, onClose }) {
           'accept': 'application/json',
           'x-api-key': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiI0MDVkYzlhYi03YWU5LTQ0NzQtOGUxYy03Mjg3YWNhMWNhZmEiLCJzdWIiOiJkOWEwMTRhNy1kNDIwLTRkZWUtODdjNS1jNmFjZDljMmFjZWQiLCJpYXQiOjE3MDE3MjUzMTF9.i9YuYTvZ-_d8MnOgxNQWFQM12unJNnLDfSG5GSvrqBU'
         },
-        body: JSON.stringify({
-          referenceId: referenceId,
-          email: email
-        })
+        body: JSON.stringify({ referenceId, email })
       });
 
       if (!response.ok) {
         throw new Error('GameShift registration failed');
       }
 
-      // Handle response from GameShift
       const gameShiftData = await response.json();
       console.log('GameShift registration successful:', gameShiftData);
-      login()
+      login();
       onClose(); // Close the modal
     } catch (error) {
       setErrorMessage(`Registration error: ${error.message}`);
