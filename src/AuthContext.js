@@ -13,14 +13,8 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     // Listen for authentication state changes
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in
-        setIsAuthenticated(true);
-      } else {
-        // User is signed out
-        setIsAuthenticated(false);
-      }
-      setLoading(false);
+      setIsAuthenticated(!!user); // Update isAuthenticated based on user presence
+      setLoading(false); // Set loading to false once the auth state is determined
     });
 
     // Cleanup subscription on unmount

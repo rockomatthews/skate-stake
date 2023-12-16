@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase'; // Adjust the path as necessary
+import { useAuth } from '../AuthContext';
 
 function SignInModal({ isOpen, onClose }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const { login } = useAuth(); // Use the login function from AuthContext
 
   const handleSignIn = async (event) => {
     event.preventDefault();
@@ -18,6 +20,7 @@ function SignInModal({ isOpen, onClose }) {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      login(); // Update authentication state
       onClose(); // Close the modal on successful sign in
     } catch (error) {
       setErrorMessage(`Sign in error: ${error.message}`);
