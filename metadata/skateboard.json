@@ -1,0 +1,16 @@
+{
+    "name": "Skateboard00",
+    "description": "A free skateboard",
+    "sourceImage": "https://firebasestorage.googleapis.com/v0/b/skate-stake.appspot.com/o/skateboard00.gif?alt=media&token=48cfe199-369b-42b7-bab7-f3f85cdd091e",
+    "attributes": [
+      {
+        "trait_type": "Learning Multiplier",
+        "value": "1"
+      },
+      {
+        "trait_type": "Speed",
+        "value": "1"
+      }
+    ]
+}
+

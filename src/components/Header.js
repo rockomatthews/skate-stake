@@ -16,6 +16,7 @@ function Header() {
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false); // State for Drawer
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const logoUrl = "https://firebasestorage.googleapis.com/v0/b/skate-stake.appspot.com/o/Skate-Stake-Logo-Main.svg?alt=media&token=e2ac22da-2f29-4a13-b5f0-385b1d0e41a7";
 
   const handleMenu = (event) => {
@@ -47,6 +48,13 @@ function Header() {
       return;
     }
     setDrawerOpen(open);
+  };
+
+  const toggleMobileDrawer = (open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    setMobileDrawerOpen(open);
   };
 
   const menuItems = [
@@ -89,16 +97,17 @@ function Header() {
 
   return (
     <AppBar position="static">
-    <Toolbar>
-      <IconButton
-        edge="start"
-        color="inherit"
-        aria-label="menu"
-        onClick={toggleDrawer(true)}
-        sx={{ mr: 2, display: { sm: 'none' } }}
-      >
-        <MenuIcon />
-      </IconButton>
+      <Toolbar>
+        {/* Hamburger menu icon for mobile */}
+        <IconButton
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          onClick={toggleMobileDrawer(true)}
+          sx={{ mr: 2, display: { xs: 'block', sm: 'none' } }}
+        >
+          <MenuIcon />
+        </IconButton>
       <img src={logoUrl} alt="Logo" style={{ height: '50px', marginRight: '10px' }} />
       <Box sx={{ flexGrow: 1 }} /> 
         {isAuthenticated ? (
@@ -151,6 +160,15 @@ function Header() {
       </Toolbar>
       <SignUpModal isOpen={isSignUpModalOpen} onClose={handleCloseSignUpModal} />
       <SignInModal isOpen={isSignInModalOpen} onClose={handleCloseSignInModal} />
+      <Drawer
+        anchor="left"
+        open={mobileDrawerOpen}
+        onClose={toggleMobileDrawer(false)}
+        sx={{ display: { xs: 'block', sm: 'none' } }}
+      >
+        {drawerContent}
+      </Drawer>
+      
       <Drawer
         variant="permanent"
         sx={{

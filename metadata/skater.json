@@ -1,39 +1,37 @@
-  {
-    "id": "6ba6e801-258c-4d5d-86b9-4f65c522bb1c",
-    "name": "Skater",
-    "description": "Detailed skater attributes for gameplay",
-    "sourceImage": "https://example.com/path/to/skater-image.png",
+curl --request POST \
+     --url https://api.gameshift.dev/assets \
+     --header 'accept: application/json' \
+     --header 'content-type: application/json' \
+     --header 'x-api-key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiI0MDVkYzlhYi03YWU5LTQ0NzQtOGUxYy03Mjg3YWNhMWNhZmEiLCJzdWIiOiJkOWEwMTRhNy1kNDIwLTRkZWUtODdjNS1jNmFjZDljMmFjZWQiLCJpYXQiOjE3MDE3MjUzMTF9.i9YuYTvZ-_d8MnOgxNQWFQM12unJNnLDfSG5GSvrqBU' \
+     --data '
+{
+  "details": {
+    "name": "Skater00",
+    "description": "Skater00 tester",
+    "sourceImage": "https://firebasestorage.googleapis.com/v0/b/skate-stake.appspot.com/o/skater00.gif?alt=media&token=2bb8ce62-bc0d-48f5-8d3f-efc93b5218c6",
     "attributes": [
       {
-        "trait_type": "General Attitude",
-        "value": "Confident"
+        "trait_type": "Attitude",
+        "value": "Interested"
       },
       {
         "trait_type": "Adrenaline Boost",
-        "value": "90%"
+        "value": "00%"
       },
       {
-        "trait_type": "Skill Level",
-        "value": "Advanced"
+        "trait_type": "Age",
+        "value": "14"
       },
       {
         "trait_type": "Stamina",
-        "value": "High"
-      },
-      {
-        "trait_type": "Focus",
-        "value": "Sharp"
+        "value": "Low"
       },
       {
         "category": "Flips",
         "traits": [
           {
             "trait_type": "Backflip Success Rate",
-            "value": "85%"
-          },
-          {
-            "trait_type": "Frontflip Success Rate",
-            "value": "80%"
+            "value": "00%"
           }
         ]
       },
@@ -41,12 +39,8 @@
         "category": "Spins",
         "traits": [
           {
-            "trait_type": "360 Spin Success Rate",
-            "value": "75%"
-          },
-          {
-            "trait_type": "720 Spin Success Rate",
-            "value": "65%"
+            "trait_type": "180 Spin Success Rate",
+            "value": "00%"
           }
         ]
       },
@@ -55,11 +49,7 @@
         "traits": [
           {
             "trait_type": "Kickflip Success Rate",
-            "value": "80%"
-          },
-          {
-            "trait_type": "Heelflip Success Rate",
-            "value": "70%"
+            "value": "00%"
           }
         ]
       },
@@ -68,14 +58,11 @@
         "traits": [
           {
             "trait_type": "Nosegrab Success Rate",
-            "value": "85%"
-          },
-          {
-            "trait_type": "Tailgrab Success Rate",
-            "value": "82%"
+            "value": "00%"
           }
         ]
       }
     ]
-  }
-  
+  },
+  "collectionId": "e6c74a89-6a2d-4acf-a7b4-f79e7bb56f32"
+}'
