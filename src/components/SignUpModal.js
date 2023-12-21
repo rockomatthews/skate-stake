@@ -54,7 +54,7 @@ function SignUpModal({ isOpen, onClose }) {
           skaterMetadata: {
             "name": "Skater00",
             "description": "Skater00 tester",
-            "sourceImage": "https://firebasestorage.googleapis.com/v0/b/skate-stake.appspot.com/o/skater00.gif?alt=media&token=2bb8ce62-bc0d-48f5-8d3f-efc93b5218c6",
+            "imageUrl": "https://firebasestorage.googleapis.com/v0/b/skate-stake.appspot.com/o/skater00.gif?alt=media&token=2bb8ce62-bc0d-48f5-8d3f-efc93b5218c6",
             "collectionId": "e6c74a89-6a2d-4acf-a7b4-f79e7bb56f32",
             "attributes": [
               {
@@ -110,11 +110,11 @@ function SignUpModal({ isOpen, onClose }) {
                 ]
               }
             ]
-        },
+          },
           skateboardMetadata: {
             "name": "Skateboard00",
             "description": "A free skateboard",
-            "sourceImage": "https://firebasestorage.googleapis.com/v0/b/skate-stake.appspot.com/o/skateboard00.gif?alt=media&token=48cfe199-369b-42b7-bab7-f3f85cdd091e",
+            "imageUrl": "https://firebasestorage.googleapis.com/v0/b/skate-stake.appspot.com/o/skateboard00.gif?alt=media&token=48cfe199-369b-42b7-bab7-f3f85cdd091e",
             "collectionId": "3e0bd7ea-38ad-4674-bfab-a726b5561385",
             "attributes": [
               {
@@ -126,23 +126,21 @@ function SignUpModal({ isOpen, onClose }) {
                 "value": "1"
               }
             ]
-        }
-                
+          }
         })
       });
 
-      if (!createAssetsResponse.ok) {
-        throw new Error('Failed to create GameShift assets');
-      }
+        if (!createAssetsResponse.ok) {
+          throw new Error('Failed to create GameShift assets');
+        }
 
-      // Save user data in Firestore
       await addDoc(collection(db, 'users'), {
         email: email,
         createdAt: new Date(),
         referenceId: referenceId,
         walletAddress: walletAddress
       });
-
+      
       login(userCredential.user);
       onClose(); // Close the modal
     } catch (error) {
@@ -200,9 +198,3 @@ function SignUpModal({ isOpen, onClose }) {
 }
 
 export default SignUpModal;
-
-
-
-
-
-
