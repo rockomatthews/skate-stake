@@ -7,7 +7,7 @@ const { getAuth } = require('firebase-admin/auth');
 
 const admin = require('firebase-admin');
 require('dotenv').config();
-
+console.log(process.env); 
 
 const app = express();
 app.use(cors());
@@ -34,56 +34,49 @@ const skaterMetadata = {
   "collectionId": "e6c74a89-6a2d-4acf-a7b4-f79e7bb56f32",
   "attributes": [
     {
-      "trait_type": "Attitude",
-      "value": "Interested"
+      "displayType": "Steezy",
+      "trait_type": "steezy",
+      "value": "open"
     },
     {
-      "trait_type": "Adrenaline Boost",
-      "value": "00%"
+      "displayType": "Adrenaline Boost",
+      "traitType": "adrenaline_boost",
+      "value": "20%"
     },
     {
+      "displayType": "Adrenaline Boost",
       "trait_type": "Age",
       "value": "14"
     },
     {
+      "displayType": "Adrenaline Boost",
       "trait_type": "Stamina",
       "value": "Low"
     },
     {
-      "category": "Flips",
-      "traits": [
-        {
-          "trait_type": "Backflip Success Rate",
-          "value": "00%"
-        }
-      ]
+      "displayType": "Ollie",
+      "trait_type": "ollie",
+      "value": "80%"
     },
     {
-      "category": "Spins",
-      "traits": [
-        {
-          "trait_type": "180 Spin Success Rate",
-          "value": "00%"
-        }
-      ]
+      "displayType": "Backflip Success Rate",
+      "trait_type": "backflip_success_rate",
+      "value": "00%"
     },
     {
-      "category": "Board Flips",
-      "traits": [
-        {
-          "trait_type": "Kickflip Success Rate",
-          "value": "00%"
-        }
-      ]
+      "displayType": "180 Success Rate",
+      "trait_type": "180_success_rate",
+      "value": "00%"
     },
     {
-      "category": "Grabs",
-      "traits": [
-        {
-          "trait_type": "Nosegrab Success Rate",
-          "value": "00%"
-        }
-      ]
+      "displayType": "Kickflip Success Rate",
+      "trait_type": "kickflip_success_rate",
+      "value": "00%"
+    },
+    {
+      "displayType": "Nosegrab Success Rate",
+      "trait_type": "nosegrab_success_rate",
+      "value": "00%"
     }
   ]
 };
@@ -95,11 +88,13 @@ const skateboardMetadata = {
   "collectionId": "3e0bd7ea-38ad-4674-bfab-a726b5561385",
   "attributes": [
     {
-      "trait_type": "Learning Multiplier",
+      "displayType": "Learning Multiplier",
+      "trait_type": "learning_multiplier",
       "value": "1"
     },
     {
-      "trait_type": "Speed",
+      "displayType": "Speed",
+      "trait_type": "speed",
       "value": "slow"
     }
   ]
@@ -202,10 +197,3 @@ app.post('/createGameShiftAssets', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-
-
-
-
-
-
