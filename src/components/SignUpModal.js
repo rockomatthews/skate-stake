@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 import { auth } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 import { useAuth } from '../AuthContext';
 import { db } from '../firebase';
 import { collection, addDoc } from 'firebase/firestore';
@@ -23,124 +23,29 @@ function SignUpModal({ isOpen, onClose }) {
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const referenceId = uuidv4(); // Generate a unique reference ID
+      const referenceId = userCredential.user.uid; // Use Firebase UID as referenceId
 
-      // Register user with GameShift
-      const gameShiftUserResponse = await fetch('https://api.gameshift.dev/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'application/json',
-          'x-api-key': process.env.REACT_APP_API_KEY
-        },
-        body: JSON.stringify({ referenceId, email })
-      });
-
-      if (!gameShiftUserResponse.ok) {
-        throw new Error('GameShift registration failed');
-      }
-
-      const gameShiftUserData = await gameShiftUserResponse.json();
-      const walletAddress = gameShiftUserData.address;
-
-      // Create GameShift assets
-      const createAssetsResponse = await fetch('/createGameShiftAssets', {
+      // Request to create GameShift assets
+      const createAssetsResponse = await fetch('http://localhost:3001/createGameShiftAssets', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          referenceId,
-          skaterMetadata: {
-            "name": "Skater00",
-            "description": "Skater00 tester",
-            "imageUrl": "https://firebasestorage.googleapis.com/v0/b/skate-stake.appspot.com/o/skater00.gif?alt=media&token=2bb8ce62-bc0d-48f5-8d3f-efc93b5218c6",
-            "collectionId": "e6c74a89-6a2d-4acf-a7b4-f79e7bb56f32",
-            "attributes": [
-              {
-                "trait_type": "Attitude",
-                "value": "Interested"
-              },
-              {
-                "trait_type": "Adrenaline Boost",
-                "value": "00%"
-              },
-              {
-                "trait_type": "Age",
-                "value": "14"
-              },
-              {
-                "trait_type": "Stamina",
-                "value": "Low"
-              },
-              {
-                "category": "Flips",
-                "traits": [
-                  {
-                    "trait_type": "Backflip Success Rate",
-                    "value": "00%"
-                  }
-                ]
-              },
-              {
-                "category": "Spins",
-                "traits": [
-                  {
-                    "trait_type": "180 Spin Success Rate",
-                    "value": "00%"
-                  }
-                ]
-              },
-              {
-                "category": "Board Flips",
-                "traits": [
-                  {
-                    "trait_type": "Kickflip Success Rate",
-                    "value": "00%"
-                  }
-                ]
-              },
-              {
-                "category": "Grabs",
-                "traits": [
-                  {
-                    "trait_type": "Nosegrab Success Rate",
-                    "value": "00%"
-                  }
-                ]
-              }
-            ]
-          },
-          skateboardMetadata: {
-            "name": "Skateboard00",
-            "description": "A free skateboard",
-            "imageUrl": "https://firebasestorage.googleapis.com/v0/b/skate-stake.appspot.com/o/skateboard00.gif?alt=media&token=48cfe199-369b-42b7-bab7-f3f85cdd091e",
-            "collectionId": "3e0bd7ea-38ad-4674-bfab-a726b5561385",
-            "attributes": [
-              {
-                "trait_type": "Learning Multiplier",
-                "value": "1"
-              },
-              {
-                "trait_type": "Speed",
-                "value": "1"
-              }
-            ]
-          }
-        })
+        body: JSON.stringify({ referenceId })
       });
 
-        if (!createAssetsResponse.ok) {
-          throw new Error('Failed to create GameShift assets');
-        }
+      if (!createAssetsResponse.ok) {
+        throw new Error('Failed to create GameShift assets');
+      }
 
-      await addDoc(collection(db, 'users'), {
+      // Save user data in Firestore
+     await addDoc(collection(db, 'users'), {
         email: email,
         createdAt: new Date(),
         referenceId: referenceId,
-        walletAddress: walletAddress
+        walletAddress: userCredential.user.uid
       });
-      
+
       login(userCredential.user);
       onClose(); // Close the modal
     } catch (error) {
