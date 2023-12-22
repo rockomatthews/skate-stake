@@ -23,20 +23,7 @@ function SignUpModal({ isOpen, onClose }) {
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const referenceId = userCredential.user.uid; // Use Firebase UID as referenceId
-
-      // Request to create GameShift assets
-      const createAssetsResponse = await fetch('http://localhost:3001/createGameShiftAssets', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ referenceId })
-      });
-
-      if (!createAssetsResponse.ok) {
-        throw new Error('Failed to create GameShift assets');
-      }
+      const referenceId = userCredential.user.uid; // Firebase UID as referenceId
 
       // Save user data in Firestore
      await addDoc(collection(db, 'users'), {

@@ -3,11 +3,8 @@ const cors = require('cors');
 const fetch = require('node-fetch');
 const { initializeApp, cert } = require('firebase-admin/app');
 const { getAuth } = require('firebase-admin/auth');
-
-
 const admin = require('firebase-admin');
 require('dotenv').config();
-console.log(process.env); 
 
 const app = express();
 app.use(cors());
@@ -15,8 +12,6 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
 const GAMESHIFT_API_KEY = process.env.GAMESHIFT_API_KEY;
-console.log('GameShift API KEY:', process.env.GAMESHIFT_API_KEY);
-console.log('FIREBASE_SERVICE_ACCOUNT:', process.env.FIREBASE_SERVICE_ACCOUNT);
 const FIREBASE_SERVICE_ACCOUNT = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
 // Initialize Firebase Admin SDK
@@ -24,7 +19,9 @@ initializeApp({
   credential: cert(FIREBASE_SERVICE_ACCOUNT)
 });
 
-
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 // Skater and Skateboard metadata
 const skaterMetadata = {
@@ -35,48 +32,48 @@ const skaterMetadata = {
   "attributes": [
     {
       "displayType": "Steezy",
-      "trait_type": "steezy",
+      "traitType": "steezy",
       "value": "open"
     },
     {
       "displayType": "Adrenaline Boost",
       "traitType": "adrenaline_boost",
-      "value": "20%"
+      "value": "20"
     },
     {
       "displayType": "Adrenaline Boost",
-      "trait_type": "Age",
+      "traitType": "Age",
       "value": "14"
     },
     {
       "displayType": "Adrenaline Boost",
-      "trait_type": "Stamina",
+      "traitType": "Stamina",
       "value": "Low"
     },
     {
       "displayType": "Ollie",
-      "trait_type": "ollie",
-      "value": "80%"
+      "traitType": "ollie",
+      "value": "80"
     },
     {
       "displayType": "Backflip Success Rate",
-      "trait_type": "backflip_success_rate",
-      "value": "00%"
+      "traitType": "backflip_success_rate",
+      "value": "00"
     },
     {
       "displayType": "180 Success Rate",
-      "trait_type": "180_success_rate",
-      "value": "00%"
+      "traitType": "180_success_rate",
+      "value": "00"
     },
     {
       "displayType": "Kickflip Success Rate",
-      "trait_type": "kickflip_success_rate",
-      "value": "00%"
+      "traitType": "kickflip_success_rate",
+      "value": "00"
     },
     {
       "displayType": "Nosegrab Success Rate",
-      "trait_type": "nosegrab_success_rate",
-      "value": "00%"
+      "traitType": "nosegrab_success_rate",
+      "value": "00"
     }
   ]
 };
@@ -89,12 +86,12 @@ const skateboardMetadata = {
   "attributes": [
     {
       "displayType": "Learning Multiplier",
-      "trait_type": "learning_multiplier",
+      "traitType": "learning_multiplier",
       "value": "1"
     },
     {
       "displayType": "Speed",
-      "trait_type": "speed",
+      "traitType": "speed",
       "value": "slow"
     }
   ]
@@ -102,6 +99,16 @@ const skateboardMetadata = {
 
 // Function to create GameShift asset
 async function createGameShiftAsset(referenceId, metadata) {
+  console.log('Creating GameShift asset with metadata:', JSON.stringify({
+    details: {
+      name: metadata.name,
+      description: metadata.description,
+      imageUrl: metadata.imageUrl,
+      attributes: metadata.attributes
+    },
+    destinationUserReferenceId: referenceId,
+    collectionId: metadata.collectionId
+  }));
   try {
     const response = await fetch('https://api.gameshift.dev/assets', {
       method: 'POST',
@@ -122,6 +129,9 @@ async function createGameShiftAsset(referenceId, metadata) {
       })
     });
 
+    console.log('Response Status:', response.status);
+    console.log('Response Text:', await response.text());
+
     if (!response.ok) {
       throw new Error(`Failed to create GameShift asset for ${metadata.name}`);
     }
@@ -133,6 +143,8 @@ async function createGameShiftAsset(referenceId, metadata) {
   }
 }
 
+console.log('Using GameShift API Key:', GAMESHIFT_API_KEY);
+
 // Endpoint to handle user registration
 app.post('/registerUser', async (req, res) => {
   const { email, password } = req.body;
@@ -143,33 +155,39 @@ app.post('/registerUser', async (req, res) => {
       email: email,
       password: password
     });
-
+    
     const referenceId = userRecord.uid; // Use Firebase UID as referenceId
 
     // Register user with GameShift
     const gameShiftUserResponse = await fetch('https://api.gameshift.dev/users', {
-      method: 'POST',
-      headers: {
+    method: 'POST',
+    headers: {
         'Content-Type': 'application/json',
         'accept': 'application/json',
         'x-api-key': GAMESHIFT_API_KEY
-      },
-      body: JSON.stringify({ referenceId, email })
-    });
+    },
+    body: JSON.stringify({ referenceId, email })
+});
+
+    const gameShiftUserData = await gameShiftUserResponse.json();
+    const walletAddress = gameShiftUserData.address;
 
     if (!gameShiftUserResponse.ok) {
       throw new Error('GameShift registration failed');
     }
 
-    const gameShiftUserData = await gameShiftUserResponse.json();
-    const walletAddress = gameShiftUserData.address;
 
     // Save user data in Firestore
+    try {
     await admin.firestore().collection('users').doc(referenceId).set({
       email: email,
       createdAt: new Date(),
       walletAddress: walletAddress
     });
+    console.log("User data written to Firestore for:", referenceId);
+  } catch(error) {
+    console.error("Error writing to Firestore:", error);
+  }
 
     res.json({ message: 'User registration successful', userRecord, gameShiftUserData });
   } catch (error) {
@@ -178,16 +196,23 @@ app.post('/registerUser', async (req, res) => {
   }
 });
 
+
+
 // New endpoint to create GameShift assets
 app.post('/createGameShiftAssets', async (req, res) => {
   const { referenceId } = req.body;
 
+  // Use the same referenceId for asset creation
+  console.log("Creating assets for Reference ID:", referenceId);
+  
+  await delay(5000); // Delay for 5 seconds
+  
   try {
     // Create GameShift assets
     const skaterAsset = await createGameShiftAsset(referenceId, skaterMetadata);
     const skateboardAsset = await createGameShiftAsset(referenceId, skateboardMetadata);
 
-    res.json({ skaterAsset, skateboardAsset });
+    res.json({ message: 'User registration successful', userRecord, gameShiftUserData, skaterAsset, skateboardAsset });
   } catch (error) {
     console.error('Error in /createGameShiftAssets:', error);
     res.status(500).json({ error: error.message });
