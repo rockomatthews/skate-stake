@@ -1,44 +1,36 @@
 import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
-import { auth } from '../firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-// import { v4 as uuidv4 } from 'uuid';
-import { useAuth } from '../AuthContext';
-import { db } from '../firebase';
-import { collection, addDoc } from 'firebase/firestore';
 
 function SignUpModal({ isOpen, onClose }) {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const { login } = useAuth();
 
   const handleSignUp = async (event) => {
     event.preventDefault();
-    if (!email || !password) {
-      setErrorMessage('Email and password are required');
+    if (!email) {
+      setErrorMessage('Email is required');
       return;
     }
     setErrorMessage('');
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const referenceId = userCredential.user.uid; // Firebase UID as referenceId
-
-      console.log("User signed up with reference ID:", referenceId);
-
-      // Save user data in Firestore
-     await addDoc(collection(db, 'users'), {
-        email: email,
-        createdAt: new Date(),
-        referenceId: referenceId,
-        walletAddress: userCredential.user.uid
+      // Send request to your server to register the user with GameShift and create assets
+      const response = await fetch('http://localhost:3001/registerUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email })  // Send only email, server will handle the rest
       });
 
-      login(userCredential.user);
-      onClose(); // Close the modal
-      console.log("User data saved to Firestore:", email);
-      
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Failed to register with GameShift');
+      }
+
+      const result = await response.json();
+      console.log("GameShift User and Assets Created:", result);
+      onClose(); // Close the modal on successful registration
     } catch (error) {
       setErrorMessage(`Registration error: ${error.message}`);
     }
@@ -71,22 +63,10 @@ function SignUpModal({ isOpen, onClose }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             Sign Up
           </Button>
-          {errorMessage && <Typography color="red">{errorMessage}</Typography>}
+          {errorMessage && <Typography color="error">{errorMessage}</Typography>}
         </Box>
       </Box>
     </Modal>
