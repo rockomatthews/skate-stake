@@ -25,6 +25,8 @@ function SignUpModal({ isOpen, onClose }) {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const referenceId = userCredential.user.uid; // Firebase UID as referenceId
 
+      console.log("User signed up with reference ID:", referenceId);
+
       // Save user data in Firestore
      await addDoc(collection(db, 'users'), {
         email: email,
@@ -35,6 +37,8 @@ function SignUpModal({ isOpen, onClose }) {
 
       login(userCredential.user);
       onClose(); // Close the modal
+      console.log("User data saved to Firestore:", email);
+      
     } catch (error) {
       setErrorMessage(`Registration error: ${error.message}`);
     }

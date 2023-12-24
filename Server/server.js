@@ -19,9 +19,6 @@ initializeApp({
   credential: cert(FIREBASE_SERVICE_ACCOUNT)
 });
 
-function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 // Skater and Skateboard metadata
 const skaterMetadata = {
@@ -31,24 +28,19 @@ const skaterMetadata = {
   "collectionId": "e6c74a89-6a2d-4acf-a7b4-f79e7bb56f32",
   "attributes": [
     {
-      "displayType": "Steezy",
-      "traitType": "steezy",
-      "value": "open"
-    },
-    {
       "displayType": "Adrenaline Boost",
       "traitType": "adrenaline_boost",
       "value": "20"
     },
     {
-      "displayType": "Adrenaline Boost",
-      "traitType": "Age",
+      "displayType": "Age",
+      "traitType": "age",
       "value": "14"
     },
     {
-      "displayType": "Adrenaline Boost",
-      "traitType": "Stamina",
-      "value": "Low"
+      "displayType": "Stamina Multiplier",
+      "traitType": "stamina_multiplier",
+      "value": "1.2"
     },
     {
       "displayType": "Ollie",
@@ -63,20 +55,22 @@ const skaterMetadata = {
     {
       "displayType": "180 Success Rate",
       "traitType": "180_success_rate",
-      "value": "00"
+      "value": "0"
     },
     {
       "displayType": "Kickflip Success Rate",
       "traitType": "kickflip_success_rate",
-      "value": "00"
+      "value": "0"
     },
     {
       "displayType": "Nosegrab Success Rate",
       "traitType": "nosegrab_success_rate",
-      "value": "00"
+      "value": "0"
     }
   ]
 };
+
+console.log(skaterMetadata);
 
 const skateboardMetadata = {
   "name": "Skateboard00",
@@ -87,7 +81,7 @@ const skateboardMetadata = {
     {
       "displayType": "Learning Multiplier",
       "traitType": "learning_multiplier",
-      "value": "1"
+      "value": "1.1"
     },
     {
       "displayType": "Speed",
@@ -202,17 +196,27 @@ app.post('/registerUser', async (req, res) => {
 app.post('/createGameShiftAssets', async (req, res) => {
   const { referenceId } = req.body;
 
-  // Use the same referenceId for asset creation
   console.log("Creating assets for Reference ID:", referenceId);
   
-  await delay(5000); // Delay for 5 seconds
+
   
   try {
     // Create GameShift assets
     const skaterAsset = await createGameShiftAsset(referenceId, skaterMetadata);
-    const skateboardAsset = await createGameShiftAsset(referenceId, skateboardMetadata);
+    console.log("Skater Asset Created:", skaterAsset);
 
-    res.json({ message: 'User registration successful', userRecord, gameShiftUserData, skaterAsset, skateboardAsset });
+    const skateboardAsset = await createGameShiftAsset(referenceId, skateboardMetadata);
+    console.log("Skateboard Asset Created:", skateboardAsset);
+
+    // Save skater asset data to Firestore
+    await admin.firestore().collection('skaterAssets').doc(skaterAsset.id).set(skaterAsset);
+    console.log("Skater asset data written to Firestore:", skaterAsset);
+
+    // Save skateboard asset data to Firestore
+    await admin.firestore().collection('skateboardAssets').doc(skateboardAsset.id).set(skateboardAsset);
+    console.log("Skateboard asset data written to Firestore:", skateboardAsset);
+
+    res.json({ skaterAsset, skateboardAsset });
   } catch (error) {
     console.error('Error in /createGameShiftAssets:', error);
     res.status(500).json({ error: error.message });
@@ -222,3 +226,5 @@ app.post('/createGameShiftAssets', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+
