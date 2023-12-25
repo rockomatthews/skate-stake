@@ -41,22 +41,6 @@ app.post('/registerUser', async (req, res) => {
   }
 });
 
-const skaterMetadata = {
-  name: "Skater00",
-  description: "The collection of the first",
-  collectionId: "e6c74a89-6a2d-4acf-a7b4-f79e7bb56f32",
-  // Add any other relevant metadata here
-};
-
-const skateboardMetadata = {
-  name: "Skateboard00",
-  description: "The OG Skateboard",
-  collectionId: "3e0bd7ea-38ad-4674-bfab-a726b5561385",
-  // Add any other relevant metadata here
-};
-
-
-
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

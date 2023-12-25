@@ -1,17 +1,22 @@
 import { AuthProvider } from './AuthContext';
 import { ThemeProvider } from '@mui/material/styles';
+import { ActiveTabProvider } from './ActiveTabContext';
 import Header from './components/Header'
 import theme from './Theme';
+import MainContent from './components/MainContent';
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <AuthProvider>
-        <div className="App">
-          <Header />
-        </div>
-      </AuthProvider>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider theme={theme}>
+        <ActiveTabProvider>
+          <div className="App">
+            <Header />
+            <MainContent />
+          </div>
+        </ActiveTabProvider>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 
