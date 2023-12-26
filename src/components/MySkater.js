@@ -1,11 +1,13 @@
+// MySkater.js
 import React from 'react';
 
 function MySkater() {
+  // Add logic to display the skater asset
   return (
     <div>
       <h2>My Skater</h2>
-      <p>Details about your skater will be displayed here.</p>
-      {/* Additional My Skater content goes here */}
+      <p>Your skater details will be displayed here.</p>
+      {/* Display the skater asset */}
     </div>
   );
 }

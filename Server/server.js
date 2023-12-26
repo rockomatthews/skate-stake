@@ -13,15 +13,15 @@ const GAMESHIFT_API_KEY = process.env.GAMESHIFT_API_KEY;
 
 app.post('/registerUser', async (req, res) => {
   const { email } = req.body;
-  const referenceId = uuidv4(); // Generate a unique referenceId
+  const referenceId = uuidv4(); // Generate a unique referenceId for the user
 
   try {
     const gameShiftUserResponse = await fetch('https://api.gameshift.dev/users', {
       method: 'POST',
       headers: {
-          'Content-Type': 'application/json',
-          'accept': 'application/json',
-          'x-api-key': GAMESHIFT_API_KEY
+        'Content-Type': 'application/json',
+        'accept': 'application/json',
+        'x-api-key': GAMESHIFT_API_KEY
       },
       body: JSON.stringify({ referenceId, email })
     });
@@ -33,8 +33,11 @@ app.post('/registerUser', async (req, res) => {
     }
 
     const gameShiftUserData = await gameShiftUserResponse.json();
-    console.log("GameShift user created successfully for:", email);
-    res.json({ message: 'User registration successful', gameShiftUserData });
+
+    res.json({ 
+      message: 'User registration successful', 
+      gameShiftUserData
+    });
   } catch (error) {
     console.error('Error in /registerUser:', error);
     res.status(500).json({ error: error.message });

@@ -1,12 +1,27 @@
 // Home.js
-import React from 'react';
+import React, { useState, useContext } from 'react';
+import PasswordModal from './PasswordModal';
+import { ActiveTabContext } from '../ActiveTabContext';
 
 function Home() {
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const { changeActiveTab } = useContext(ActiveTabContext);
+
+  const handlePasswordSuccess = () => {
+    setIsPasswordModalOpen(false);
+    changeActiveTab('mySkater'); // Switch to 'My Skater' tab
+    // Here, you can also implement logic to create the skater asset
+  };
+
   return (
     <div>
       <h2>Home</h2>
-      <p>Welcome to the GameShift Skater App!</p>
-      {/* Additional home page content goes here */}
+      <button onClick={() => setIsPasswordModalOpen(true)}>Set Password</button>
+      <PasswordModal
+        isOpen={isPasswordModalOpen}
+        onClose={() => setIsPasswordModalOpen(false)}
+        onSuccess={handlePasswordSuccess}
+      />
     </div>
   );
 }
