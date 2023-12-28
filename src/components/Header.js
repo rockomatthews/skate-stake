@@ -13,7 +13,7 @@ import { useContext } from 'react';
 import { ActiveTabContext } from '../ActiveTabContext';
 
 function Header() {
-  const { changeActiveTab } = useContext(ActiveTabContext);
+  const { isUserCreated, changeActiveTab } = useContext(ActiveTabContext);
   const { isAuthenticated, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
@@ -62,6 +62,7 @@ function Header() {
 
   const menuItems = [
     { text: 'Home', icon: <HomeIcon />, onClick: () => changeActiveTab('home') },
+    isUserCreated && { text: 'My Skaters', icon: <PersonIcon />, onClick: () => changeActiveTab('mySkater') },
     { text: 'My Skaters', icon: <PersonIcon />, onClick: () => changeActiveTab('mySkater') },
     { text: 'Tournaments', icon: <EventIcon />, onClick: () => console.log('Tournaments clicked') },
     { text: 'Skate Parks', icon: <ParkIcon />, onClick: () => console.log('Skate Parks clicked') },
