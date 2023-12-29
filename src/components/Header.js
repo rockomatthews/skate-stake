@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { AppBar, Toolbar, IconButton, Menu, MenuItem, Button, Drawer, List, ListItem, ListItemIcon, ListItemText, Box } from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -9,7 +9,6 @@ import ParkIcon from '@mui/icons-material/Park';
 import SignUpModal from './SignUpModal';
 import SignInModal from './SignInModal';
 import { useAuth } from '../AuthContext';
-import { useContext } from 'react';
 import { ActiveTabContext } from '../ActiveTabContext';
 
 function Header() {
@@ -62,8 +61,7 @@ function Header() {
 
   const menuItems = [
     { text: 'Home', icon: <HomeIcon />, onClick: () => changeActiveTab('home') },
-    isUserCreated && { text: 'My Skaters', icon: <PersonIcon />, onClick: () => changeActiveTab('mySkater') },
-    { text: 'My Skaters', icon: <PersonIcon />, onClick: () => changeActiveTab('mySkater') },
+    ...(isUserCreated ? [{ text: 'My Skaters', icon: <PersonIcon />, onClick: () => changeActiveTab('mySkater') }] : []),
     { text: 'Tournaments', icon: <EventIcon />, onClick: () => console.log('Tournaments clicked') },
     { text: 'Skate Parks', icon: <ParkIcon />, onClick: () => console.log('Skate Parks clicked') },
   ];

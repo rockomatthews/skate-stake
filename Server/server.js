@@ -2,13 +2,11 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
-const { v4: uuidv4 } = require('uuid');
 const admin = require('firebase-admin');
-
 
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
-  databaseURL: "https://skate-stake-default-rtdb.firebaseio.com" // Replace with your database URL
+  databaseURL: "https://skate-stake-default-rtdb.firebaseio.com"
 });
 
 const db = admin.firestore();
@@ -20,11 +18,10 @@ const PORT = process.env.PORT || 3001;
 const GAMESHIFT_API_KEY = process.env.GAMESHIFT_API_KEY;
 
 app.post('/registerUser', async (req, res) => {
-  const { email } = req.body;
-  const referenceId = uuidv4(); // Generate a unique referenceId for the user  const referenceId = uuidv4(); // Generate a unique referenceId for the user
-  
+  const { referenceId, email } = req.body; // Use referenceId and email from the request
 
   try {
+    // Register the user in GameShift using the Firebase UID (referenceId) and email
     const gameShiftUserResponse = await fetch('https://api.gameshift.dev/users', {
       method: 'POST',
       headers: {
@@ -43,12 +40,13 @@ app.post('/registerUser', async (req, res) => {
 
     const gameShiftUserData = await gameShiftUserResponse.json();
 
+    // Save the GameShift user data along with Firebase UID in Firestore
     const userRef = db.collection('users').doc(referenceId);
     await userRef.set({
-      email: gameShiftUserData.email,
-      address: gameShiftUserData.address, // Replace with the actual field from GameShift response if different
+      email: email,
+      address: gameShiftUserData.address, // Assuming address is part of the GameShift response
       referenceId: referenceId
-      // You can add more user-related data here if needed
+      // Other fields can be added as needed
     });
 
     res.json({ 

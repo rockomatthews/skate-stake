@@ -1,38 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { ActiveTabContext } from '../ActiveTabContext';
+import { useAuth } from '../AuthContext';
 
 function SignUpModal({ isOpen, onClose }) {
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState(''); // Add a state for password
   const [errorMessage, setErrorMessage] = useState('');
+  const { setActiveTabDirectly, setIsUserCreated } = useContext(ActiveTabContext);
+  const { login } = useAuth();
 
   const handleSignUp = async (event) => {
     event.preventDefault();
-    if (!email) {
-      setErrorMessage('Email is required');
+    if (!email || !password) {
+      setErrorMessage('Email and password are required');
       return;
     }
     setErrorMessage('');
 
     try {
-      // Send request to your server to register the user with GameShift and create assets
+      // Create user in Firebase Authentication
+      const auth = getAuth();
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const firebaseUserId = userCredential.user.uid;
+
+      // Proceed to register the user in GameShift using the Firebase UID
+      await registerUserInGameShift(firebaseUserId, email);
+
+      setIsUserCreated(true);
+      setActiveTabDirectly('mySkater');
+      onClose(); // Close the modal
+      login(); // Update the authentication state
+
+      console.log("Firebase and GameShift User Created:", firebaseUserId);
+    } catch (error) {
+      setErrorMessage(`Registration error: ${error.message}`);
+    }
+  };
+
+  // Function to register user in GameShift
+  const registerUserInGameShift = async (firebaseUserId, email) => {
+    try {
       const response = await fetch('http://localhost:3001/registerUser', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email })  // Send only email, server will handle the rest
+        body: JSON.stringify({ referenceId: firebaseUserId, email })
       });
 
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(errorText || 'Failed to register with GameShift');
       }
-
-      const result = await response.json();
-      console.log("GameShift User and Assets Created:", result);
-      onClose(); // Close the modal on successful registration
+      // Handle the response as needed
     } catch (error) {
-      setErrorMessage(`Registration error: ${error.message}`);
+      console.error('Error registering user in GameShift:', error);
+      throw error; // Rethrow to be handled in the calling function
     }
   };
 
@@ -51,6 +76,7 @@ function SignUpModal({ isOpen, onClose }) {
       }}>
         <Typography variant="h6">Sign Up</Typography>
         <Box component="form" onSubmit={handleSignUp} noValidate sx={{ mt: 1 }}>
+          {/* Email input */}
           <TextField
             margin="normal"
             required
@@ -62,6 +88,19 @@ function SignUpModal({ isOpen, onClose }) {
             autoFocus
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+          />
+          {/* Password input */}
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             Sign Up
