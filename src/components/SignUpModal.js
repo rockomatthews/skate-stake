@@ -42,7 +42,7 @@ function SignUpModal({ isOpen, onClose }) {
   // Function to register user in GameShift
   const registerUserInGameShift = async (firebaseUserId, email) => {
     try {
-      const response = await fetch('http://localhost:3001/registerUser', {
+      const response = await fetch('https://skate-stake.onrender.com/registerUser', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
