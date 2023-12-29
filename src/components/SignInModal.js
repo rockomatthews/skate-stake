@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase'; // Adjust the path as necessary
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useAuth } from '../AuthContext';
 
 function SignInModal({ isOpen, onClose }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const { login } = useAuth(); // Use the login function from AuthContext
+  const { login } = useAuth();
 
   const handleSignIn = async (event) => {
     event.preventDefault();
@@ -19,11 +18,15 @@ function SignInModal({ isOpen, onClose }) {
     setErrorMessage('');
 
     try {
+      // Sign in the user with Firebase Authentication
+      const auth = getAuth();
       await signInWithEmailAndPassword(auth, email, password);
-      login(); // Update authentication state
-      onClose(); // Close the modal on successful sign in
+
+      // Update the authentication state
+      login();
+      onClose(); // Close the modal after successful sign-in
     } catch (error) {
-      setErrorMessage(`Sign in error: ${error.message}`);
+      setErrorMessage(`Sign-in error: ${error.message}`);
     }
   };
 
@@ -42,6 +45,7 @@ function SignInModal({ isOpen, onClose }) {
       }}>
         <Typography variant="h6">Sign In</Typography>
         <Box component="form" onSubmit={handleSignIn} noValidate sx={{ mt: 1 }}>
+          {/* Email input */}
           <TextField
             margin="normal"
             required
@@ -54,6 +58,7 @@ function SignInModal({ isOpen, onClose }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+          {/* Password input */}
           <TextField
             margin="normal"
             required
@@ -69,7 +74,7 @@ function SignInModal({ isOpen, onClose }) {
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             Sign In
           </Button>
-          {errorMessage && <Typography color="red">{errorMessage}</Typography>}
+          {errorMessage && <Typography color="error">{errorMessage}</Typography>}
         </Box>
       </Box>
     </Modal>
