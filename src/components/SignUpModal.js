@@ -44,7 +44,6 @@ function SignUpModal({ isOpen, onClose }) {
     try {
       const response = await fetch('https://skate-stake.onrender.com/registerUser', {
       // const response = await fetch('http://localhost:3001/registerUser', {
-      // const response = await fetch('http://skate-stake:10000/registerUser', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
