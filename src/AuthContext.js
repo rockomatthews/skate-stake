@@ -19,9 +19,11 @@ export const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  const login = (firebaseUser) => {
-    setUser(firebaseUser); // Update user state on login
+  const login = (userObj) => {
+    setUser(userObj); // Update user state on login
+    console.log(userObj)
   };
+
 
   const logout = () => {
     auth.signOut().then(() => setUser(null)); // Clear user on logout

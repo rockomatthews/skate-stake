@@ -93,42 +93,42 @@ async function createGameShiftAsset(referenceId) {
         {
           "displayType": "Adrenaline Boost",
           "traitType": "adrenaline_boost",
-          "value": 20
+          "value": "20"
         },
         {
           "displayType": "Age",
           "traitType": "age",
-          "value": 14 
+          "value": "14" 
         },
         {
           "displayType": "Stamina Multiplier",
           "traitType": "stamina_multiplier",
-          "value": 1.2
+          "value": "1.2"
         },
         {
           "displayType": "Ollie",
           "traitType": "ollie",
-          "value": 80
+          "value": "80"
         },
         {
           "displayType": "Backflip Success Rate",
           "traitType": "backflip_success_rate",
-          "value": 0
+          "value": "0"
         },
         {
           "displayType": "180 Success Rate",
           "traitType": "180_success_rate",
-          "value": 0
+          "value": "0"
         },
         {
           "displayType": "Kickflip Success Rate",
           "traitType": "kickflip_success_rate",
-          "value": 0
+          "value": "0"
         },
         {
           "displayType": "Nosegrab Success Rate",
           "traitType": "nosegrab_success_rate",
-          "value": 0
+          "value": "0"
         }
       ]
     },

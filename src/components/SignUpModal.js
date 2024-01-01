@@ -31,7 +31,7 @@ function SignUpModal({ isOpen, onClose }) {
       setIsUserCreated(true);
       setActiveTabDirectly('mySkater');
       onClose(); // Close the modal
-      login(); // Update the authentication state
+      login(userCredential.user); // Update the authentication state
 
       console.log("Firebase and GameShift User Created:", firebaseUserId);
     } catch (error) {
