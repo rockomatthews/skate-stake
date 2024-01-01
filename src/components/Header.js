@@ -13,7 +13,7 @@ import { ActiveTabContext } from '../ActiveTabContext';
 
 function Header() {
   const { isUserCreated, changeActiveTab } = useContext(ActiveTabContext);
-  const { isAuthenticated, logout } = useAuth();
+  const { user, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
@@ -110,54 +110,54 @@ function Header() {
         >
           <MenuIcon />
         </IconButton>
-      <img src={logoUrl} alt="Logo" style={{ height: '50px', marginRight: '10px' }} />
-      <Box sx={{ flexGrow: 1 }} /> 
-        {isAuthenticated ? (
-  <div>
-    <IconButton onClick={handleMenu} color="inherit">
-      <AccountCircle />
-    </IconButton>
-    <Menu
-      anchorEl={anchorEl}
-      open={Boolean(anchorEl)}
-      onClose={handleClose}
-    >
-      <MenuItem onClick={handleClose}>Account</MenuItem>
-      <MenuItem onClick={() => { handleClose(); logout(); }}>Logout</MenuItem>
-    </Menu>
-  </div>
-) : (
-  <>
-<Button 
-      color="inherit" 
-      onClick={handleOpenSignUpModal}
-      sx={{
-        backgroundColor: '#FED700',
-        borderRadius: '0',
-        color: 'black',
-        '&:hover': {
-          backgroundColor: '#fdd835', // Slightly darker yellow on hover
-        },
-        marginRight: '8px', // Optional: adds some space between the buttons
-      }}
-    >
-      Sign Up
-    </Button>
-    <Button 
-      color="inherit" 
-      onClick={handleOpenSignInModal}
-      sx={{
-        backgroundColor: '#FED700',
-        borderRadius: '0',
-        color: 'black',
-        '&:hover': {
-          backgroundColor: '#fdd835', // Slightly darker yellow on hover
-        },
-      }}
-    >
-      Sign In
-</Button>
-      </>
+        <img src={logoUrl} alt="Logo" style={{ height: '50px', marginRight: '10px' }} />
+        <Box sx={{ flexGrow: 1 }} /> 
+        {user ? (
+          <div>
+            <IconButton onClick={handleMenu} color="inherit">
+              <AccountCircle />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleClose}>Account: {user.email}</MenuItem>
+              <MenuItem onClick={() => { handleClose(); logout(); }}>Logout</MenuItem>
+            </Menu>
+          </div>
+        ) : (
+          <>
+            <Button 
+              color="inherit" 
+              onClick={handleOpenSignUpModal}
+              sx={{
+                backgroundColor: '#FED700',
+                borderRadius: '0',
+                color: 'black',
+                '&:hover': {
+                  backgroundColor: '#fdd835', // Slightly darker yellow on hover
+                },
+                marginRight: '8px', // Optional: adds some space between the buttons
+              }}
+            >
+              Sign Up
+            </Button>
+            <Button 
+              color="inherit" 
+              onClick={handleOpenSignInModal}
+              sx={{
+                backgroundColor: '#FED700',
+                borderRadius: '0',
+                color: 'black',
+                '&:hover': {
+                  backgroundColor: '#fdd835', // Slightly darker yellow on hover
+                },
+              }}
+            >
+              Sign In
+            </Button>
+          </>
         )}
       </Toolbar>
       <SignUpModal isOpen={isSignUpModalOpen} onClose={handleCloseSignUpModal} />
@@ -182,7 +182,7 @@ function Header() {
         {drawerContent}
       </Drawer>
     </AppBar>
-  );
+  );  
 }
 
 export default Header;

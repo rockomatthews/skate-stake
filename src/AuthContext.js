@@ -7,30 +7,28 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Listen for authentication state changes
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setIsAuthenticated(!!user); // Update isAuthenticated based on user presence
-      setLoading(false); // Set loading to false once the auth state is determined
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser); // Set the Firebase user object
+      setLoading(false);
     });
 
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
 
-  const login = () => {
-    setIsAuthenticated(true);
+  const login = (firebaseUser) => {
+    setUser(firebaseUser); // Update user state on login
   };
 
   const logout = () => {
-    setIsAuthenticated(false);
+    auth.signOut().then(() => setUser(null)); // Clear user on logout
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
       {!loading && children}
     </AuthContext.Provider>
   );
