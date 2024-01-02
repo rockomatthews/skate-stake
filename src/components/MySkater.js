@@ -1,17 +1,28 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../AuthContext';
 
 function MySkater() {
   const { user } = useAuth(); // Get the user object from AuthContext
+  const [assets, setAssets] = useState([]);
 
   useEffect(() => {
     if (user) {
-      console.log("Current user:", user.email);
-      // Rest of your code to handle the logged-in user
-    } else {
-      console.log("No user information available");
+      const fetchAssets = async () => {
+        try {
+          const response = await fetch(`http://localhost:3001/getUserAssets?email=${encodeURIComponent(user.email)}`);
+          if (!response.ok) {
+            throw new Error('Failed to fetch assets');
+          }
+          const data = await response.json();
+          setAssets(data.assets);
+        } catch (error) {
+          console.error('Error fetching assets:', error);
+        }
+      };
+      
+      fetchAssets();
     }
-  }, [user]); // This effect will run whenever the user object changes
+  }, [user]);
 
   const handleCreateSkaterAsset = async () => {
     if (!user) {
@@ -45,6 +56,17 @@ function MySkater() {
   return (
     <div>
       <h2>My Skater</h2>
+      {assets.length > 0 ? (
+        assets.map(asset => (
+          <div key={asset.id}>
+            <h3>{asset.details.name}</h3>
+            <img src={asset.details.imageUrl} alt={asset.details.name} style={{ maxWidth: '100%', height: 'auto' }} />
+            {/* Additional asset details */}
+          </div>
+        ))
+      ) : (
+        <p>No assets created yet.</p>
+      )}
       <button onClick={handleCreateSkaterAsset}>Create Skater Asset</button>
       {/* Other UI elements */}
     </div>

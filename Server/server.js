@@ -60,27 +60,37 @@ app.post('/registerUser', async (req, res) => {
 });
 
 app.post('/asset', async (req, res) => {
-  const userEmail = req.body.email; // Assuming email is sent in the request
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({ error: 'Email is missing' });
+  }
 
   try {
-    // Fetch the user's referenceId from Firestore
-    const userSnapshot = await db.collection('users').where('email', '==', userEmail).get();
+    // Fetch the user's referenceId from Firestore using email
+    const userSnapshot = await db.collection('users').where('email', '==', email).get();
     if (userSnapshot.empty) {
-      throw new Error('User not found');
+      return res.status(404).json({ error: 'User not found' });
     }
+    const userData = userSnapshot.docs[0].data();
+    const userReferenceId = userData.referenceId;
 
-    let userReferenceId;
-    userSnapshot.forEach(doc => {
-      userReferenceId = doc.data().referenceId;
-    });
-
+    // Create asset in GameShift
     const assetResponse = await createGameShiftAsset(userReferenceId);
+
+    // Store asset information in Firestore
+    const assetData = {
+      ...assetResponse, // Asset data returned from GameShift
+      ownerReferenceId: userReferenceId, // Link the asset to the user
+    };
+    await db.collection('assets').doc(assetResponse.id).set(assetData);
+
     res.json({ message: 'Skater asset created successfully', assetResponse });
   } catch (error) {
     console.error('Error in /asset:', error);
     res.status(500).json({ error: error.toString() });
   }
 });
+
 
 // Function to handle GameShift API interaction for asset creation
 async function createGameShiftAsset(referenceId) {
@@ -152,6 +162,32 @@ async function createGameShiftAsset(referenceId) {
 
   return assetCreationResponse.json();
 }
+
+app.get('/getUserAssets', async (req, res) => {
+  const email = req.query.email;
+  if (!email) {
+    return res.status(400).json({ error: 'Email is missing' });
+  }
+
+  try {
+    const userSnapshot = await db.collection('users').where('email', '==', email).get();
+    if (userSnapshot.empty) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    const userReferenceId = userSnapshot.docs[0].data().referenceId;
+
+    const assetsSnapshot = await db.collection('assets').where('ownerReferenceId', '==', userReferenceId).get();
+    if (assetsSnapshot.empty) {
+      return res.json({ assets: [] }); // No assets found for this user
+    }
+
+    const assets = assetsSnapshot.docs.map(doc => doc.data());
+    res.json({ assets }); // Return the assets associated with this user
+  } catch (error) {
+    console.error('Error in /getUserAssets:', error);
+    res.status(500).json({ error: error.toString() });
+  }
+});
 
 
 app.listen(PORT, () => {
