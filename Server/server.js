@@ -189,6 +189,29 @@ app.get('/getUserAssets', async (req, res) => {
   }
 });
 
+app.get('/pollAssetStatus', async (req, res) => {
+  const { assetId } = req.query;
+  if (!assetId) {
+    return res.status(400).json({ error: 'Asset ID is missing' });
+  }
+
+  try {
+    const response = await fetch(`https://api.gameshift.dev/assets/${assetId}`, {
+      headers: { 'x-api-key': GAMESHIFT_API_KEY }
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to poll asset status');
+    }
+
+    const asset = await response.json();
+    res.json(asset);
+  } catch (error) {
+    console.error('Error polling asset status:', error);
+    res.status(500).json({ error: error.toString() });
+  }
+});
+
 
 app.listen(PORT, () => {
 console.log(`Server running on port ${PORT}`);
