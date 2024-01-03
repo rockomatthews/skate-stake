@@ -75,10 +75,11 @@ app.post('/asset', async (req, res) => {
     const userReferenceId = userData.referenceId;
 
     const assetResponse = await createGameShiftAsset(userReferenceId);
-
+    console.log('Asset creation response from GameShift:', assetResponse);
     // Poll asset status until it's committed
     const committedAsset = await pollAssetStatusUntilCommitted(assetResponse.id);
-    
+    console.log('Committed Asset:', committedAsset);
+
     // Once committed, store asset information in Firestore
     const assetData = {
       ...committedAsset,

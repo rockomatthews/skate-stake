@@ -41,6 +41,7 @@ function MySkater() {
         throw new Error('Failed to create skater asset');
       }
 
+      console.log('Fetching new list of assets');
       await fetchAssets(); // Re-fetch the assets list to reflect the new addition
     } catch (error) {
       console.error('Error creating skater asset:', error);
@@ -55,13 +56,12 @@ function MySkater() {
       {assets.length > 0 ? (
         assets.map((asset, index) => (
           <div key={index}>
-            <h3>{asset.details?.name || "Processing Skater..."}</h3>
+            <h3>{asset.status === 'Committed' ? asset.name : "Processing Skater..."}</h3>
             {asset.status === 'Committed' ? (
-              <img src={asset.details?.imageUrl} alt={asset.details?.name || "Skater"} style={{ maxWidth: '100%', height: 'auto' }} />
+              <img src={asset.imageUrl} alt={asset.name} style={{ maxWidth: '40%', height: 'auto' }} />
             ) : (
               <p>Asset is being processed...</p>
             )}
-            {/* Additional asset details */}
           </div>
         ))
       ) : (
