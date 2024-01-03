@@ -26,9 +26,7 @@ function MySkater() {
   }, [fetchAssets]);
 
   const handleCreateSkaterAsset = async () => {
-    if (!user || isCreatingAsset) {
-      return;
-    }
+    if (!user || isCreatingAsset) return;
     setIsCreatingAsset(true);
 
     try {
@@ -43,31 +41,12 @@ function MySkater() {
         throw new Error('Failed to create skater asset');
       }
 
-      const { assetResponse } = await response.json();
-      await pollAssetStatus(assetResponse.id); // Poll until asset is committed
-      await fetchAssets(); // Fetch updated list of assets
+      await fetchAssets(); // Re-fetch the assets list to reflect the new addition
     } catch (error) {
       console.error('Error creating skater asset:', error);
     } finally {
       setIsCreatingAsset(false);
     }
-  };
-
-  const pollAssetStatus = async (assetId) => {
-    const checkStatus = async () => {
-      const response = await fetch(`http://localhost:3001/pollAssetStatus?assetId=${assetId}`);
-      const asset = await response.json();
-      return asset.status === 'Committed';
-    };
-
-    return new Promise((resolve) => {
-      const interval = setInterval(async () => {
-        if (await checkStatus()) {
-          clearInterval(interval);
-          resolve();
-        }
-      }, 2000); // Check every 2 seconds
-    });
   };
 
   return (
@@ -76,8 +55,12 @@ function MySkater() {
       {assets.length > 0 ? (
         assets.map((asset, index) => (
           <div key={index}>
-            <h3>{asset.details?.name}</h3>
-            <img src={asset.details?.imageUrl} alt={asset.details?.name || "Skater"} style={{ maxWidth: '100%', height: 'auto' }} />
+            <h3>{asset.details?.name || "Processing Skater..."}</h3>
+            {asset.status === 'Committed' ? (
+              <img src={asset.details?.imageUrl} alt={asset.details?.name || "Skater"} style={{ maxWidth: '100%', height: 'auto' }} />
+            ) : (
+              <p>Asset is being processed...</p>
+            )}
             {/* Additional asset details */}
           </div>
         ))

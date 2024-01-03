@@ -74,22 +74,42 @@ app.post('/asset', async (req, res) => {
     const userData = userSnapshot.docs[0].data();
     const userReferenceId = userData.referenceId;
 
-    // Create asset in GameShift
     const assetResponse = await createGameShiftAsset(userReferenceId);
 
-    // Store asset information in Firestore
+    // Poll asset status until it's committed
+    const committedAsset = await pollAssetStatusUntilCommitted(assetResponse.id);
+    
+    // Once committed, store asset information in Firestore
     const assetData = {
-      ...assetResponse, // Asset data returned from GameShift
-      ownerReferenceId: userReferenceId, // Link the asset to the user
+      ...committedAsset,
+      ownerReferenceId: userReferenceId,
     };
-    await db.collection('assets').doc(assetResponse.id).set(assetData);
+    await db.collection('assets').doc(committedAsset.id).set(assetData);
 
-    res.json({ message: 'Skater asset created successfully', assetResponse });
+    res.json({ message: 'Skater asset created successfully', assetData });
   } catch (error) {
     console.error('Error in /asset:', error);
     res.status(500).json({ error: error.toString() });
   }
 });
+
+async function pollAssetStatusUntilCommitted(assetId) {
+  let assetStatus = '';
+  let assetData = {};
+
+  while (assetStatus !== 'Committed') {
+    const response = await fetch(`https://api.gameshift.dev/assets/${assetId}`, {
+      headers: { 'x-api-key': GAMESHIFT_API_KEY }
+    });
+    const asset = await response.json();
+    assetStatus = asset.status;
+    assetData = asset;
+    await new Promise(resolve => setTimeout(resolve, 2000)); // Poll every 2 seconds
+  }
+
+  return assetData;
+}
+
 
 
 // Function to handle GameShift API interaction for asset creation
