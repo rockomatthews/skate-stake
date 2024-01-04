@@ -3,7 +3,12 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#000000', // Your custom color
+      main: '#000000', // Black for main content
+      light: '#0e0e0e', // Slightly lighter color for sidebar and header
+    },
+    text: {
+      light: '#ffffff', // White text
+      dark: '#000000'
     },
     // ... other palette options
   },

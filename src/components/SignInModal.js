@@ -20,10 +20,10 @@ function SignInModal({ isOpen, onClose }) {
     try {
       // Sign in the user with Firebase Authentication
       const auth = getAuth();
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
       // Update the authentication state
-      login();
+      login(userCredential.user);
       onClose(); // Close the modal after successful sign-in
     } catch (error) {
       setErrorMessage(`Sign-in error: ${error.message}`);

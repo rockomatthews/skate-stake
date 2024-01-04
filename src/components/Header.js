@@ -10,8 +10,11 @@ import SignUpModal from './SignUpModal';
 import SignInModal from './SignInModal';
 import { useAuth } from '../AuthContext';
 import { ActiveTabContext } from '../ActiveTabContext';
+import { useTheme } from '@mui/material/styles';
+
 
 function Header() {
+  const theme = useTheme();
   const { isUserCreated, changeActiveTab } = useContext(ActiveTabContext);
   const { user, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -68,7 +71,7 @@ function Header() {
 
   const drawerContent = (
     <Box
-      sx={{ width: 250, bgcolor: 'black' }} // Set the width and background color of the drawer
+      sx={{ width: 250, bgcolor: theme.palette.primary.light }} // Set the width and background color of the drawer
       role="presentation"
       onClick={toggleDrawer(false)}
       onKeyDown={toggleDrawer(false)}
@@ -83,14 +86,14 @@ function Header() {
             sx={{
                 backgroundColor: '#FED700',
                 margin: '5px',
-                color: 'black',
+                color: theme.palette.primary.light,
                 '&:hover': {
                 backgroundColor: '#fdd835', // Slightly darker yellow on hover
               },
             }}
           >
-            <ListItemIcon sx={{ color: 'black' }}>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.text} sx={{ color: 'black' }} />
+            <ListItemIcon sx={{ color: theme.palette.primary.light }}>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.text} sx={{ color: theme.palette.primary.light }} />
           </ListItem>
         ))}
       </List>
@@ -98,7 +101,7 @@ function Header() {
   );
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" style={{ backgroundColor: theme.palette.primary.light }}>
       <Toolbar>
         {/* Hamburger menu icon for mobile */}
         <IconButton
@@ -166,6 +169,7 @@ function Header() {
         anchor="left"
         open={mobileDrawerOpen}
         onClose={toggleMobileDrawer(false)}
+        style={{ backgroundColor: theme.palette.primary.light }}
         sx={{ display: { xs: 'block', sm: 'none' } }}
       >
         {drawerContent}
@@ -173,9 +177,10 @@ function Header() {
       
       <Drawer
         variant="permanent"
+        style={{ backgroundColor: theme.palette.primary.light }}
         sx={{
           display: { xs: 'none', sm: 'block' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 250, bgcolor: 'black', top: 64 }, // Adjust top position
+          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 250, top: 64 }, // Adjust top position
         }}
         open
       >
