@@ -15,14 +15,14 @@ import { useTheme } from '@mui/material/styles';
 
 function Header() {
   const theme = useTheme();
-  const { isUserCreated, changeActiveTab } = useContext(ActiveTabContext);
+  const { changeActiveTab } = useContext(ActiveTabContext);
   const { user, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false); // State for Drawer
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
-  const logoUrl = "https://firebasestorage.googleapis.com/v0/b/skate-stake.appspot.com/o/Skate-Stake-Logo-Main.svg?alt=media&token=e2ac22da-2f29-4a13-b5f0-385b1d0e41a7";
+  const logoUrl = "https://firebasestorage.googleapis.com/v0/b/skate-stake.appspot.com/o/header-logo1000%20px.svg?alt=media&token=f8528fc3-37c0-48aa-aa5a-dcfc4856960e";
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -64,7 +64,7 @@ function Header() {
 
   const menuItems = [
     { text: 'Home', icon: <HomeIcon />, onClick: () => changeActiveTab('home') },
-    ...(isUserCreated ? [{ text: 'My Skaters', icon: <PersonIcon />, onClick: () => changeActiveTab('mySkater') }] : []),
+    ...(user ? [{ text: 'My Skaters', icon: <PersonIcon />, onClick: () => changeActiveTab('mySkater') }] : []),
     { text: 'Tournaments', icon: <EventIcon />, onClick: () => console.log('Tournaments clicked') },
     { text: 'Skate Parks', icon: <ParkIcon />, onClick: () => console.log('Skate Parks clicked') },
   ];
@@ -101,7 +101,11 @@ function Header() {
   );
 
   return (
-    <AppBar position="static" style={{ backgroundColor: theme.palette.primary.light }}>
+    <AppBar position="static" style={{ 
+      backgroundColor: theme.palette.primary.light,
+      zIndex: 1100, // Higher than MainContent
+      position: 'relative' // To make z-index effective
+  }}>
       <Toolbar>
         {/* Hamburger menu icon for mobile */}
         <IconButton

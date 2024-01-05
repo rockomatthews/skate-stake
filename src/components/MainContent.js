@@ -10,7 +10,7 @@ function MainContent() {
   const { activeTab } = useContext(ActiveTabContext);
 
   return (
-    <div style={{ marginLeft: '250px', marginTop: '-20px', backgroundColor: theme.palette.primary.main, color: theme.palette.text.dark  }}>
+    <div style={{ padding: '40px', marginLeft: '250px', marginTop: '-20px', backgroundColor: theme.palette.primary.main, color: theme.palette.text.dark  }}>
       {/* Sidebar navigation (example) */}
 
       {/* Conditional rendering based on activeTab */}
