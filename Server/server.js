@@ -166,6 +166,8 @@ async function createGameShiftAsset(referenceId) {
     "destinationUserReferenceId": referenceId
   };
 
+  console.log('Sending request to GameShift with the following data:', skaterMetadata);
+
   const assetCreationResponse = await fetch('https://api.gameshift.dev/assets', {
     method: 'POST',
     headers: {
@@ -176,12 +178,14 @@ async function createGameShiftAsset(referenceId) {
     body: JSON.stringify(skaterMetadata)
   });
 
+  const responseText = await assetCreationResponse.text();
+  console.log('Response from GameShift:', responseText);
+
   if (!assetCreationResponse.ok) {
-    const errorDetail = await assetCreationResponse.text();
-    throw new Error(`GameShift asset creation failed: ${errorDetail}`);
+    throw new Error(`GameShift asset creation failed: ${responseText}`);
   }
 
-  return assetCreationResponse.json();
+  return JSON.parse(responseText);
 }
 
 app.get('/getUserAssets', async (req, res) => {

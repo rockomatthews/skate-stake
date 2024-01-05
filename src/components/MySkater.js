@@ -59,7 +59,7 @@ function MySkater() {
 
   return (
     <div style={{ color: theme.palette.text.light, padding: '20px' }}>
-      <h2>Click on the package to create a free Skater NFT!</h2>
+      <h2>Your Skaters</h2>
       {assets.length === 0 && (
         <Button onClick={handleCreateSkaterAsset}>
           <img
@@ -84,7 +84,7 @@ function MySkater() {
             )}
           </div>
 
-          <Box sx={{ border: '1px solid white', maxWidth: '50%', margin: 'auto', padding: '10px' }}>
+          <Box sx={{ border: '1px solid white', maxWidth: '50%', padding: '10px' }}>
             {asset.attributes.map((attr, idx) => (
               <Box key={idx} sx={{ marginBottom: '10px' }}>
                 <Typography variant="body1">{attr.traitType}: {attr.value}</Typography>
