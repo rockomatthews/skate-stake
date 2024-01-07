@@ -6,6 +6,18 @@ import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import EventIcon from '@mui/icons-material/Event';
 import ParkIcon from '@mui/icons-material/Park';
+import SportsSkateboardingIcon from '@mui/icons-material/SportsSkateboarding';
+import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import NewspaperIcon from '@mui/icons-material/Newspaper';
+import SchoolIcon from '@mui/icons-material/School';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import ChatIcon from '@mui/icons-material/Chat';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import SignUpModal from './SignUpModal';
 import SignInModal from './SignInModal';
 import { useAuth } from '../AuthContext';
@@ -67,6 +79,18 @@ function Header() {
     ...(user ? [{ text: 'My Skaters', icon: <PersonIcon />, onClick: () => changeActiveTab('mySkater') }] : []),
     { text: 'Tournaments', icon: <EventIcon />, onClick: () => console.log('Tournaments clicked') },
     { text: 'Skate Parks', icon: <ParkIcon />, onClick: () => console.log('Skate Parks clicked') },
+    { text: 'Play S-K-A-T-E', icon: <SportsSkateboardingIcon />, onClick: () => console.log('Play S-K-A-T-E clicked') },
+    { text: 'Free Rides', icon: <DirectionsBikeIcon />, onClick: () => console.log('Free Rides clicked') },
+    { text: 'Stats', icon: <BarChartIcon />, onClick: () => console.log('Stats clicked') },
+    { text: 'Mating', icon: <FavoriteIcon />, onClick: () => console.log('Mating clicked') },
+    { text: 'Hospital', icon: <LocalHospitalIcon />, onClick: () => console.log('Hospital clicked') },
+    { text: '$MEDAL', icon: <EmojiEventsIcon />, onClick: () => console.log('$MEDAL clicked') },
+    { text: 'News', icon: <NewspaperIcon />, onClick: () => console.log('News clicked') },
+    { text: 'Learn to Play', icon: <SchoolIcon />, onClick: () => console.log('Learn to Play clicked') },
+    { text: 'Account', icon: <AccountCircleIcon />, onClick: () => console.log('Account clicked') },
+    { text: 'Logout', icon: <ExitToAppIcon />, onClick: () => { handleClose(); logout(); } },
+    { text: 'Discord', icon: <ChatIcon />, onClick: () => console.log('Discord clicked') },
+    { text: 'Tech Support', icon: <SupportAgentIcon />, onClick: () => console.log('Tech Support clicked') },
   ];
 
   const drawerContent = (
