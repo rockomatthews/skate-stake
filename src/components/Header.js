@@ -6,10 +6,11 @@ import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import EventIcon from '@mui/icons-material/Event';
 import ParkIcon from '@mui/icons-material/Park';
-import SportsSkateboardingIcon from '@mui/icons-material/SportsSkateboarding';
-import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
+import SkateboardingIcon from '@mui/icons-material/Skateboarding';
+import LandscapeIcon from '@mui/icons-material/Landscape';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import StorefrontIcon from '@mui/icons-material/Storefront';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
@@ -77,13 +78,14 @@ function Header() {
   const menuItems = [
     { text: 'Home', icon: <HomeIcon />, onClick: () => changeActiveTab('home') },
     ...(user ? [{ text: 'My Skaters', icon: <PersonIcon />, onClick: () => changeActiveTab('mySkater') }] : []),
+    { text: 'Free Rides', icon: <LandscapeIcon />, onClick: () => console.log('Free Rides clicked') },
     { text: 'Tournaments', icon: <EventIcon />, onClick: () => console.log('Tournaments clicked') },
+    { text: 'Play S-K-A-T-E', icon: <SkateboardingIcon />, onClick: () => console.log('Play S-K-A-T-E clicked') },
     { text: 'Skate Parks', icon: <ParkIcon />, onClick: () => console.log('Skate Parks clicked') },
-    { text: 'Play S-K-A-T-E', icon: <SportsSkateboardingIcon />, onClick: () => console.log('Play S-K-A-T-E clicked') },
-    { text: 'Free Rides', icon: <DirectionsBikeIcon />, onClick: () => console.log('Free Rides clicked') },
-    { text: 'Stats', icon: <BarChartIcon />, onClick: () => console.log('Stats clicked') },
-    { text: 'Mating', icon: <FavoriteIcon />, onClick: () => console.log('Mating clicked') },
     { text: 'Hospital', icon: <LocalHospitalIcon />, onClick: () => console.log('Hospital clicked') },
+    { text: 'Mating', icon: <FavoriteIcon />, onClick: () => console.log('Mating clicked') },
+    { text: 'Marketplace', icon: <StorefrontIcon />, onClick: () => console.log('Marketplace clicked') },
+    { text: 'Stats', icon: <BarChartIcon />, onClick: () => console.log('Stats clicked') },
     { text: '$MEDAL', icon: <EmojiEventsIcon />, onClick: () => console.log('$MEDAL clicked') },
     { text: 'News', icon: <NewspaperIcon />, onClick: () => console.log('News clicked') },
     { text: 'Learn to Play', icon: <SchoolIcon />, onClick: () => console.log('Learn to Play clicked') },
