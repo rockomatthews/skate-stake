@@ -38,9 +38,9 @@ function Home() {
       <div style={{ ...itemStyle, ...textStyle }}>
         <h3>sponsored by The Extreme Games & ESPN 8 'The Ocho'</h3>
         <h1>Welcome to Skate Stake</h1>
-        <p1>Skate Stake is unlike any other skateboarding game, EXACTLY like every other skateboarding game. Here's the difference. In Skate Stake, you can win $$$. 
+        <p>Skate Stake is unlike any other skateboarding game, EXACTLY like every other skateboarding game. Here's the difference. In Skate Stake, you can win $$$. 
           Think of Skate Stake like a cross between The Sims (with less drama) and The X-Games Big Air event (but with 3 times as many ramps). Buy $Medal and stake it at skateparks to stregthen 
-          your skater's 'bag of tricks.' Compete in tournaments against 9 other skaters or 1 vs 1 games of flatland S-K-A-T-E.</p1>
+          your skater's 'bag of tricks.' Compete in tournaments against 9 other skaters or 1 vs 1 games of flatland S-K-A-T-E.</p>
           <br />
         <h3>Sign up with an email and password to receive a free Skater NFT and shitty but OMG so rare Skateboard NFT while supplies last! Early adopters will be rewarded  </h3>
       </div>

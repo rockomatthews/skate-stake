@@ -110,11 +110,11 @@ function Header() {
             key={index} 
             onClick={item.onClick}
             sx={{
-                backgroundColor: '#FED700',
+                backgroundColor: theme.palette.primary.yellow,
                 margin: '5px',
                 color: theme.palette.primary.light,
                 '&:hover': {
-                backgroundColor: '#fdd835', // Slightly darker yellow on hover
+                backgroundColor: theme.palette.primary.yellowHover, // Slightly darker yellow on hover
               },
             }}
           >
@@ -127,10 +127,9 @@ function Header() {
   );
 
   return (
-    <AppBar position="static" style={{ 
+    <AppBar position="fixed" style={{ 
       backgroundColor: theme.palette.primary.light,
       zIndex: 1100, // Higher than MainContent
-      position: 'relative' // To make z-index effective
   }}>
       <Toolbar>
         {/* Hamburger menu icon for mobile */}
