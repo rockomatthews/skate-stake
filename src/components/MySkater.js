@@ -24,8 +24,8 @@ function MySkater() {
   const fetchAssets = useCallback(async () => {
     if (!user) return;
     try {
-      const response = await fetch(`http://localhost:3001/getUserAssets?email=${encodeURIComponent(user.email)}`);
-      // const response = await fetch(`https://skate-stake.onrender.com/getUserAssets?email=${encodeURIComponent(user.email)}`);
+      // const response = await fetch(`http://localhost:3001/getUserAssets?email=${encodeURIComponent(user.email)}`);
+      const response = await fetch(`https://skate-stake.onrender.com/getUserAssets?email=${encodeURIComponent(user.email)}`);
       if (!response.ok) {
         throw new Error('Failed to fetch assets');
       }
@@ -47,8 +47,8 @@ function MySkater() {
 
     try {
       const userEmail = user.email;
-      const response = await fetch('http://localhost:3001/asset', {
-      // const response = await fetch('https://skate-stake.onrender.com/asset', {
+      // const response = await fetch('http://localhost:3001/asset', {
+      const response = await fetch('https://skate-stake.onrender.com/asset', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: userEmail })
