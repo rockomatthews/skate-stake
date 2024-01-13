@@ -15,7 +15,8 @@ function MySkater() {
   const [assets, setAssets] = useState([]);
   const [isCreatingAsset, setIsCreatingAsset] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
-  
+  const SKATER_COLLECTION_ID = "e6c74a89-6a2d-4acf-a7b4-f79e7bb56f32";
+  const SKATEBOARD_COLLECTION_ID = "3e0bd7ea-38ad-4674-bfab-a726b5561385";
 
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
@@ -95,6 +96,7 @@ function MySkater() {
   };
 
 
+
   return (
     <div style={{ padding: '20px' }}>
       <Tabs style={{ background: theme.palette.primary.yellow, color: theme.palette.text.light }}
@@ -115,12 +117,12 @@ function MySkater() {
         <Tab label="Settings" />
       </Tabs>
 
-      {selectedTab === 0 && (
+  {selectedTab === 0 && (
   <div style={{ color: theme.palette.text.light }}>
     <h2>Your Skaters</h2>
     {assets.length === 0 && (
       <Button onClick={handleCreateSkaterAsset}>
-        <img
+         <img
           src="https://firebasestorage.googleapis.com/v0/b/skate-stake.appspot.com/o/Skater00.png?alt=media&token=60a721c0-3aaa-424d-88ff-7dbac8b91a1f"
           alt="Create Skater Asset"
           style={{ maxWidth: '300px', maxHeight: '300px' }}
@@ -128,56 +130,56 @@ function MySkater() {
       </Button>
     )}
 
-    {assets.filter(asset => asset.collectionId === "e6c74a89-6a2d-4acf-a7b4-f79e7bb56f32").map((asset, index) => (
+      {assets.filter(asset => asset.collectionId === SKATER_COLLECTION_ID).map((asset, index) => (
       <div key={index} style={{ marginBottom: '20px' }}>
-        <h3>{asset.status === 'Committed' ? asset.name : 'Processing Skater...'}</h3>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          {asset.status === 'Committed' ? (
-            <img src={asset.imageUrl} alt={asset.name} style={{ maxWidth: '30%', border: '1px solid white', height: 'auto', marginRight: '20px', padding: '10px' }} />
-          ) : (
-            <p>Asset is being processed...</p>
-          )}
-          {index === 0 && (
-            <Button 
-              style={{ background: theme.palette.primary.yellow, color: theme.palette.text.dark }}
-              variant="contained"
-              onClick={redirectToSkateboards}
-            >
-                Create a Skateboard
-            </Button>
-          )}
+          <h3>{asset.status === 'Committed' ? asset.name : 'Processing Skater...'}</h3>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            {asset.status === 'Committed' ? (
+              <img src={asset.imageUrl} alt={asset.name} style={{ maxWidth: '30%', border: '1px solid white', height: 'auto', marginRight: '20px', padding: '10px' }} />
+            ) : (
+              <p>Asset is being processed...</p>
+            )}
+            {index === 0 && (
+              <Button 
+                style={{ background: theme.palette.primary.yellow, color: theme.palette.text.dark }}
+                variant="contained"
+                onClick={redirectToSkateboards}
+              >
+                  Create a Skateboard
+              </Button>
+            )}
+          </div>
+
+          <Box sx={{ border: '1px solid white', maxWidth: '30%', color: theme.palette.text.light, padding: '10px' }}>
+            {asset.attributes.map((attr, idx) => (
+              <Box key={idx} sx={{ marginBottom: '10px' }}>
+                <Typography variant="body1">{attr.traitType}: {attr.value}</Typography>
+                <LinearProgress 
+                  variant="determinate" 
+                  value={Number(attr.value)} 
+                  sx={{
+                    height: 10, 
+                    backgroundColor: 'black', 
+                    '& .MuiLinearProgress-bar': { backgroundColor: theme.palette.primary.yellow },
+                    border: '1px solid white'
+                  }} 
+                />
+              </Box>
+            ))}
+          </Box>
         </div>
-
-        <Box sx={{ border: '1px solid white', maxWidth: '30%', color: theme.palette.text.light, padding: '10px' }}>
-          {asset.attributes.map((attr, idx) => (
-            <Box key={idx} sx={{ marginBottom: '10px' }}>
-              <Typography variant="body1">{attr.traitType}: {attr.value}</Typography>
-              <LinearProgress 
-                variant="determinate" 
-                value={Number(attr.value)} 
-                sx={{
-                  height: 10, 
-                  backgroundColor: 'black', 
-                  '& .MuiLinearProgress-bar': { backgroundColor: theme.palette.primary.yellow },
-                  border: '1px solid white'
-                }} 
-              />
-            </Box>
-          ))}
-        </Box>
+      ))}
       </div>
-    ))}
-  </div>
-)}
+    )}
 
 
-    
+
 {selectedTab === 1 && (
   <div style={{ color: theme.palette.text.light }}>
     <h1>Skateboards</h1>
     {assets.length === 1 && (
       <Button onClick={handleCreateSkateboardAsset}>
-        <img
+         <img
           src="https://firebasestorage.googleapis.com/v0/b/skate-stake.appspot.com/o/Screenshot%202024-01-08%20at%207.19.41%E2%80%AFPM.png?alt=media&token=21af4b3a-a8a5-4a8a-a04d-4491a5f33302"
           alt="Create Skater Asset"
           style={{ maxWidth: '300px', maxHeight: '300px' }}
@@ -185,12 +187,12 @@ function MySkater() {
       </Button>
     )}
 
-    {assets.filter(asset => asset.collectionId === "3e0bd7ea-38ad-4674-bfab-a726b5561385").map((asset, index) => (
+{assets.filter(asset => asset.collectionId === SKATEBOARD_COLLECTION_ID).map((asset, index) => (
       <div key={index} style={{ marginBottom: '20px' }}>
         <h3>{asset.status === 'Committed' ? asset.name : 'Processing Skateboard...'}</h3>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {asset.status === 'Committed' ? (
-                      <img src={asset.imageUrl} alt={asset.name} style={{ maxWidth: '30%', border: '1px solid white', height: 'auto', marginRight: '20px', padding: '10px' }} />
+            <img src={asset.imageUrl} alt={asset.name} style={{ maxWidth: '30%', border: '1px solid white', height: 'auto', marginRight: '20px', padding: '10px' }} />
           ) : (
             <p>Asset is being processed...</p>
           )}
