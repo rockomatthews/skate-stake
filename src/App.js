@@ -10,7 +10,7 @@ function App() {
     <AuthProvider>
       <ThemeProvider theme={theme}>
         <ActiveTabProvider>
-          <div className="App">
+          <div className="App" style={{ backgroundColor: theme.palette.primary.main }}>
             <Header />
             <MainContent />
           </div>
