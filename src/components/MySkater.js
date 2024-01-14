@@ -51,7 +51,7 @@ function MySkater() {
 
     try {
     // const response = await fetch('http://localhost:3001/asset', {
-    const response = await fetch('https://skate-stake.onrender.com//asset', {
+    const response = await fetch('https://skate-stake.onrender.com/asset', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: user.email, assetType: 'skater' }) // Include assetType
@@ -77,7 +77,7 @@ function MySkater() {
     try {
       const userEmail = user.email;
       // const response = await fetch('http://localhost:3001/asset', {
-      const response = await fetch('https://skate-stake.onrender.com//asset', {
+      const response = await fetch('https://skate-stake.onrender.com/asset', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: userEmail, assetType: 'skateboard' }) // Specify asset type
