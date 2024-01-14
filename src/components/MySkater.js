@@ -117,7 +117,7 @@ function MySkater() {
 
   {selectedTab === 0 && (
   <div style={{ color: theme.palette.text.light }}>
-    <h2>Your Skaters</h2>
+    {/* <h1>My Skaters</h1> */}
     {assets.length === 0 && (
       <Button onClick={handleCreateSkaterAsset}>
         <img
@@ -137,7 +137,7 @@ function MySkater() {
           ) : (
             <p>Asset is being processed...</p>
           )}
-          {index === 0 && (
+          {index === 0 && assets.length === 1 && (
             <Button 
               style={{ background: theme.palette.primary.yellow, color: theme.palette.text.dark }}
               variant="contained"
@@ -174,7 +174,7 @@ function MySkater() {
     
 {selectedTab === 1 && (
   <div style={{ color: theme.palette.text.light }}>
-    <h1>Skateboards</h1>
+    {/* <h1>Skateboards</h1> */}
     {assets.length === 1 && (
       <Button onClick={handleCreateSkateboardAsset}>
         <img

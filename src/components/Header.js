@@ -138,7 +138,7 @@ function Header() {
           color="inherit"
           aria-label="menu"
           onClick={toggleMobileDrawer(true)}
-          sx={{ mr: 2, display: { xs: 'block', sm: 'none' } }}
+          sx={{ mr: 2, display: { xs: 'block', sm: 'block', md: 'none' } }}
         >
           <MenuIcon />
         </IconButton>
@@ -199,7 +199,7 @@ function Header() {
         open={mobileDrawerOpen}
         onClose={toggleMobileDrawer(false)}
         style={{ backgroundColor: theme.palette.primary.light }}
-        sx={{ display: { xs: 'block', sm: 'none' } }}
+        sx={{ display: { xs: 'block', sm: 'block', md: 'none' } }}
       >
         {drawerContent}
       </Drawer>
@@ -208,7 +208,7 @@ function Header() {
         variant="permanent"
         style={{ backgroundColor: theme.palette.primary.light }}
         sx={{
-          display: { xs: 'none', sm: 'block' },
+          display: { xs: 'none', sm: 'none', md: 'block' },
           '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 250, top: 64 }, // Adjust top position
         }}
         open
