@@ -115,7 +115,7 @@ function MySkater() {
         <Tab label="Settings" />
       </Tabs>
 
-      {selectedTab === 0 && (
+  {selectedTab === 0 && (
   <div style={{ color: theme.palette.text.light }}>
     <h2>Your Skaters</h2>
     {assets.length === 0 && (
@@ -128,7 +128,7 @@ function MySkater() {
       </Button>
     )}
 
-    {assets.filter(asset => asset.collectionId === "e6c74a89-6a2d-4acf-a7b4-f79e7bb56f32").map((asset, index) => (
+    {assets.filter(asset => asset.name === "Skater00").map((asset, index) => (
       <div key={index} style={{ marginBottom: '20px' }}>
         <h3>{asset.status === 'Committed' ? asset.name : 'Processing Skater...'}</h3>
         <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -185,7 +185,7 @@ function MySkater() {
       </Button>
     )}
 
-    {assets.filter(asset => asset.collectionId === "3e0bd7ea-38ad-4674-bfab-a726b5561385").map((asset, index) => (
+    {assets.filter(asset => asset.name === "Skateboard00").map((asset, index) => (
       <div key={index} style={{ marginBottom: '20px' }}>
         <h3>{asset.status === 'Committed' ? asset.name : 'Processing Skateboard...'}</h3>
         <div style={{ display: 'flex', alignItems: 'center' }}>

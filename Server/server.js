@@ -63,6 +63,7 @@ const skaterMetadata = {
   details: {
     "name": "Skater00",
     "description": "The Architect Skater",
+    "collectionId": "e6c74a89-6a2d-4acf-a7b4-f79e7bb56f32",
     "imageUrl": "https://firebasestorage.googleapis.com/v0/b/skate-stake.appspot.com/o/skater00.gif?alt=media&token=2bb8ce62-bc0d-48f5-8d3f-efc93b5218c6",
     "attributes": [
       {
@@ -107,14 +108,13 @@ const skaterMetadata = {
       }
     ]
   },
-  // "destinationUserReferenceId": referenceId,
-  "collectionId": "e6c74a89-6a2d-4acf-a7b4-f79e7bb56f32"
 };
 
 const skateboardMetadata = {
   details : {
   "name": "Skateboard00",
   "description": "A free skateboard",
+  "collectionId": "3e0bd7ea-38ad-4674-bfab-a726b5561385",
   "imageUrl": "https://firebasestorage.googleapis.com/v0/b/skate-stake.appspot.com/o/skateboard00.gif?alt=media&token=48cfe199-369b-42b7-bab7-f3f85cdd091e",
   "attributes": [
     {
@@ -129,8 +129,6 @@ const skateboardMetadata = {
     }
   ]
   },
-  // "destinationUserReferenceId": referenceId,
-  "collectionId": "3e0bd7ea-38ad-4674-bfab-a726b5561385"
 };
 
 // ... [previous code]
