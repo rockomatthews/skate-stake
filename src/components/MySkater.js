@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { useMediaQuery } from '@mui/material';
 import { useAuth } from '../AuthContext';
 import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
@@ -15,7 +16,13 @@ function MySkater() {
   const [assets, setAssets] = useState([]);
   const [isCreatingAsset, setIsCreatingAsset] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
-  
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const tabStyle = {
+    background: theme.palette.primary.yellow,
+    color: theme.palette.text.light,
+    ...(isMobile && { width: '100%', overflowX: 'auto' }), // Full width and scrollable on mobile
+  };
 
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
@@ -28,8 +35,8 @@ function MySkater() {
   const fetchAssets = useCallback(async () => {
     if (!user) return;
     try {
-      // const response = await fetch(`http://localhost:3001/getUserAssets?email=${encodeURIComponent(user.email)}`);
-      const response = await fetch(`https://skate-stake.onrender.com/getUserAssets?email=${encodeURIComponent(user.email)}`);
+      const response = await fetch(`http://localhost:3001/getUserAssets?email=${encodeURIComponent(user.email)}`);
+      // const response = await fetch(`https://skate-stake.onrender.com/getUserAssets?email=${encodeURIComponent(user.email)}`);
       if (!response.ok) {
         throw new Error('Failed to fetch assets');
       }
@@ -50,8 +57,8 @@ function MySkater() {
     setIsCreatingAsset(true);
 
     try {
-    // const response = await fetch('http://localhost:3001/asset', {
-    const response = await fetch('https://skate-stake.onrender.com/asset', {
+    const response = await fetch('http://localhost:3001/asset', {
+    // const response = await fetch('https://skate-stake.onrender.com/asset', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: user.email, assetType: 'skater' }) // Include assetType
@@ -76,8 +83,8 @@ function MySkater() {
 
     try {
       const userEmail = user.email;
-      // const response = await fetch('http://localhost:3001/asset', {
-      const response = await fetch('https://skate-stake.onrender.com/asset', {
+      const response = await fetch('http://localhost:3001/asset', {
+      // const response = await fetch('https://skate-stake.onrender.com/asset', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: userEmail, assetType: 'skateboard' }) // Specify asset type
@@ -98,8 +105,8 @@ function MySkater() {
 
 
   return (
-    <div style={{ padding: '20px' }}>
-      <Tabs style={{ background: theme.palette.primary.yellow, color: theme.palette.text.light }}
+    <div style={{ padding: '10px' }}>
+       <Tabs style={tabStyle} 
         value={selectedTab}
         onChange={handleTabChange}
         indicatorColor="primary"
@@ -135,7 +142,7 @@ function MySkater() {
         <h3>{asset.status === 'Committed' ? asset.name : 'Processing Skater...'}</h3>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {asset.status === 'Committed' ? (
-            <img src={asset.imageUrl} alt={asset.name} style={{ maxWidth: '30%', border: '1px solid white', height: 'auto', marginRight: '20px', padding: '10px' }} />
+            <img src={asset.imageUrl} alt={asset.name} style={{ maxWidth: '30%', minWidth: '200px', border: '1px solid white', height: 'auto'}} />
           ) : (
             <p>Asset is being processed...</p>
           )}
@@ -150,7 +157,7 @@ function MySkater() {
           )}
         </div>
 
-        <Box sx={{ border: '1px solid white', maxWidth: '30%', color: theme.palette.text.light, padding: '10px' }}>
+        <Box sx={{ border: '1px solid white', maxWidth: '30%', minWidth: '200px', color: theme.palette.text.light }}>
           {asset.attributes.map((attr, idx) => (
             <Box key={idx} sx={{ marginBottom: '10px' }}>
               <Typography variant="body1">{attr.traitType}: {attr.value}</Typography>
@@ -192,14 +199,14 @@ function MySkater() {
         <h3>{asset.status === 'Committed' ? asset.name : 'Processing Skateboard...'}</h3>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {asset.status === 'Committed' ? (
-                      <img src={asset.imageUrl} alt={asset.name} style={{ maxWidth: '30%', border: '1px solid white', height: 'auto', marginRight: '20px', padding: '10px' }} />
+                      <img src={asset.imageUrl} alt={asset.name} style={{ maxWidth: '30%', minWidth: '200px', border: '1px solid white', height: 'auto', marginRight: '20px'}} />
           ) : (
             <p>Asset is being processed...</p>
           )}
         </div>
 
         {asset.status === 'Committed' && (
-          <Box sx={{ border: '1px solid white', maxWidth: '30%', color: theme.palette.text.light, padding: '10px' }}>
+          <Box sx={{ border: '1px solid white', maxWidth: '30%', minWidth: '200px', color: theme.palette.text.light }}>
             {asset.attributes.map((attr, idx) => (
               <Box key={idx} sx={{ marginBottom: '10px' }}>
                 <Typography variant="body1">{attr.traitType}: {attr.value}</Typography>

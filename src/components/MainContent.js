@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { useMediaQuery } from '@mui/material';
 import Home from './Home';
 import MySkater from './MySkater';
-import { useContext } from 'react';
 import { ActiveTabContext } from '../ActiveTabContext';
 import { useTheme } from '@mui/material/styles';
 
 function MainContent() {
   const theme = useTheme();
   const { activeTab } = useContext(ActiveTabContext);
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const mainContentStyle = {
     padding: '40px',
-    marginLeft: '20%',
+    marginLeft: isMobile ? 0 : '250px', // Conditionally set marginLeft
     marginTop: '64px',
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.text.light,

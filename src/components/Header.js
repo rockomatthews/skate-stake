@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useMediaQuery } from '@mui/material';
 import { AppBar, Toolbar, IconButton, Menu, MenuItem, Button, Drawer, List, ListItem, ListItemIcon, ListItemText, Box } from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -36,6 +37,13 @@ function Header() {
   const [drawerOpen, setDrawerOpen] = useState(false); // State for Drawer
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const logoUrl = "https://firebasestorage.googleapis.com/v0/b/skate-stake.appspot.com/o/header-logo1000%20px.svg?alt=media&token=f8528fc3-37c0-48aa-aa5a-dcfc4856960e";
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const appBarStyle = {
+    backgroundColor: theme.palette.primary.light,
+    zIndex: 1100,
+    ...(isMobile && { marginLeft: 0 }), // Remove marginLeft on mobile screens
+  };
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -127,10 +135,7 @@ function Header() {
   );
 
   return (
-    <AppBar position="fixed" style={{ 
-      backgroundColor: theme.palette.primary.light,
-      zIndex: 1100, // Higher than MainContent
-  }}>
+    <AppBar position="fixed" style={appBarStyle}>
       <Toolbar>
         {/* Hamburger menu icon for mobile */}
         <IconButton
@@ -138,7 +143,7 @@ function Header() {
           color="inherit"
           aria-label="menu"
           onClick={toggleMobileDrawer(true)}
-          sx={{ mr: 2, display: { xs: 'block', sm: 'block', md: 'none' } }}
+          sx={{ mr: 2, display: { xs: 'block', sm: 'none' }, fontSize: '1.5rem' }}
         >
           <MenuIcon />
         </IconButton>
