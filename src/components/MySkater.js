@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import Settings from './Settings';
 import { useMediaQuery } from '@mui/material';
 import { useAuth } from '../AuthContext';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -104,7 +105,7 @@ function MySkater() {
   };
 
 
-  return (
+return (
     <div style={{ padding: '10px' }}>
        <Tabs style={tabStyle} 
         value={selectedTab}
@@ -229,6 +230,9 @@ function MySkater() {
   </div>
 )}
 
+{selectedTab === 6 && (
+  <Settings />
+)}
 
 
       {isCreatingAsset && <CircularProgress />}
