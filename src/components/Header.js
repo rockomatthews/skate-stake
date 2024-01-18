@@ -41,6 +41,7 @@ function Header() {
 
   const appBarStyle = {
     backgroundColor: theme.palette.primary.light,
+    height: '64px',
     zIndex: 1100,
     ...(isMobile && { marginLeft: 0 }), // Remove marginLeft on mobile screens
   };
@@ -84,6 +85,7 @@ function Header() {
   };
 
   const menuItems = [
+    
     { text: 'Home', icon: <HomeIcon />, onClick: () => changeActiveTab('home') },
     ...(user ? [{ text: 'My Skaters', icon: <PersonIcon />, onClick: () => changeActiveTab('mySkater') }] : []),
     { text: 'Free Rides', icon: <LandscapeIcon />, onClick: () => console.log('Free Rides clicked') },
