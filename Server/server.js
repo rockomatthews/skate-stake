@@ -264,6 +264,48 @@ app.get('/pollAssetStatus', async (req, res) => {
 });
 
 
+app.post('/updateUserLogo', async (req, res) => {
+  const { firebaseUserId, logoUrl } = req.body;
+  
+   // Debugging: Log to see if this part is reached with correct data
+   console.log("Received logo update request:", { firebaseUserId, logoUrl });
+
+  
+  if (!firebaseUserId || !logoUrl) {
+    return res.status(400).json({ error: 'Missing firebaseUserId or logo URL' });
+  }
+
+  try {
+    const userRef = db.collection('users').doc(firebaseUserId);
+    await userRef.update({ logo: logoUrl });
+
+    res.json({ message: 'User logo updated successfully' });
+  } catch (error) {
+    console.error('Error updating user logo:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/getUserData', async (req, res) => {
+  const { firebaseUserId } = req.query;
+  if (!firebaseUserId) {
+      return res.status(400).json({ error: 'firebaseUserId is missing' });
+  }
+
+  try {
+      const userRef = db.collection('users').doc(firebaseUserId);
+      const doc = await userRef.get();
+      if (!doc.exists) {
+          return res.status(404).json({ error: 'User not found' });
+      }
+      res.json(doc.data());
+  } catch (error) {
+      console.error('Error fetching user data:', error);
+      res.status(500).json({ error: error.toString() });
+  }
+});
+
+
 app.listen(PORT, () => {
 console.log(`Server running on port ${PORT}`);
 });
