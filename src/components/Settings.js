@@ -10,6 +10,7 @@ function Settings() {
     const firebaseUserId = user?.uid;
     const [selectedDrawer, setSelectedDrawer] = useState('Skater Settings');
     const [logo, setLogo] = useState("https://firebasestorage.googleapis.com/v0/b/skate-stake.appspot.com/o/blankLogo.png?alt=media&token=1a47b77e-adee-4a57-ad25-06677458d727"); // Updated to null initially
+    const [teamName, setTeamName] = useState(""); // State for team name
     const [uploading, setUploading] = useState(false);
 
 
@@ -22,13 +23,15 @@ function Settings() {
         const fetchUserData = async () => {
             if (firebaseUserId) {
                 try {
-                    const response = await fetch(`http://localhost:3001/getUserData?firebaseUserId=${firebaseUserId}`);
+                    // const response = await fetch(`http://localhost:3001/getUserData?firebaseUserId=${firebaseUserId}`);
+                    const response = await fetch(`https://skate-stake.onrender.com/getUserData?firebaseUserId=${firebaseUserId}`);
                     if (!response.ok) {
                         throw new Error('Failed to fetch user data');
                     }
                     const userData = await response.json();
-                    setLogo(userData.logo);
-                    // Other user data can be set here
+                    // Set the logo if it exists in the database, otherwise use default
+                    setLogo(userData.logo || "https://firebasestorage.googleapis.com/v0/b/skate-stake.appspot.com/o/blankLogo.png?alt=media&token=1a47b77e-adee-4a57-ad25-06677458d727");
+                    setTeamName(userData.teamName || ""); // Set the team name, default to empty string if not set
                 } catch (error) {
                     console.error('Error fetching user data:', error);
                 }
@@ -56,8 +59,9 @@ function Settings() {
                 // Debugging: Log to see if this part is reached with correct data
                 console.log("Uploading logo URL to server:", { firebaseUserId, logoUrl: url });
             
-                const updateResponse = await fetch('http://localhost:3001/updateUserLogo', {
-                    method: 'POST',
+                // const updateResponse = await fetch('http://localhost:3001/updateUserLogo', {
+                const updateResponse = await fetch('https://skate-stake.onrender.com/updateUserLogo', {
+                method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ firebaseUserId, logoUrl: url })
                 });
@@ -79,9 +83,31 @@ function Settings() {
     };
 
     const handleSaveSettings = async () => {
-        // Function to handle saving all settings
-        // This includes uploading the logo and saving the team name
-        // Use the logic from handleFileSelect and extend it to include other settings
+        if (firebaseUserId) {
+            try {
+                // const updateResponse = await fetch('http://localhost:3001/updateUserSettings', {
+                const updateResponse = await fetch('https://skate-stake.onrender.com/updateUserSettings', {
+                method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        firebaseUserId, 
+                        logoUrl: logo, 
+                        teamName: teamName
+                    })
+                });
+            
+                if (!updateResponse.ok) {
+                    throw new Error('Failed to update user settings');
+                }
+            
+                const updateResult = await updateResponse.json();
+                console.log("Server response on saving settings:", updateResult);
+            } catch (error) {
+                console.error('Error saving settings:', error);
+            }
+        } else {
+            console.error("User ID is not available");
+        }
     };
 
     const drawerList = (
@@ -131,8 +157,10 @@ function Settings() {
                         <Typography variant="h5" sx={{ pt: 0 }}>Skater Settings</Typography>
                         <TextField
                             fullWidth
+                            value={teamName}
+                            onChange={(e) => setTeamName(e.target.value)}
                             margin="normal"
-                            placeholder="Skaters' Team Name"
+                            placeholder="Team Name"
                             InputLabelProps={{ style: { color: theme.palette.text.light } }} // Label color
                             InputProps={{
                                 style: {
@@ -156,9 +184,12 @@ function Settings() {
                                     component="label"
                                     sx={{ 
                                         position: 'absolute', 
-                                        bottom: 0, 
-                                        right: 0, 
-                                        color: theme.palette.primary.white 
+                                        bottom: 20, 
+                                        right: 20, 
+                                        borderRadius: '0',
+                                        color: theme.palette.primary.white,
+                                        backgroundColor: theme.palette.primary.dark,
+                                        opacity: 0.5, 
                                     }}
                                 >
                                     Upload Logo
@@ -174,7 +205,15 @@ function Settings() {
                         <Button
                             onClick={handleSaveSettings}
                             disabled={uploading}
-                            sx={{ backgroundColor: theme.palette.primary.yellow }}
+                            sx={{
+                                backgroundColor: '#FED700',
+                                borderRadius: '0',
+                                color: 'black',
+                                '&:hover': {
+                                  backgroundColor: '#fdd835', // Slightly darker yellow on hover
+                                },
+                                marginTop: '20px',
+                              }}
                         >
                             Save Settings
                         </Button>

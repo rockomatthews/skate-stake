@@ -134,6 +134,7 @@ const skateboardMetadata = {
 // ... [previous code]
 
 app.post('/asset', async (req, res) => {
+  console.log("Request received for /asset:", req.body);
   const { email, assetType } = req.body;
   if (!email || !assetType) {
     return res.status(400).json({ error: 'Missing email or asset type' });
@@ -305,6 +306,25 @@ app.get('/getUserData', async (req, res) => {
   }
 });
 
+app.post('/updateUserSettings', async (req, res) => {
+  const { firebaseUserId, logoUrl, teamName } = req.body;
+  if (!firebaseUserId || !logoUrl || !teamName) {
+      return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  try {
+      const userRef = db.collection('users').doc(firebaseUserId);
+      await userRef.update({ 
+          logo: logoUrl,
+          teamName: teamName
+      });
+
+      res.json({ message: 'User settings updated successfully' });
+  } catch (error) {
+      console.error('Error updating user settings:', error);
+      res.status(500).json({ error: error.message });
+  }
+});
 
 app.listen(PORT, () => {
 console.log(`Server running on port ${PORT}`);
