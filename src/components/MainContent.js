@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { useMediaQuery } from '@mui/material';
 import Home from './Home';
 import MySkater from './MySkater';
+import SkateParks from './SkateParks';
 import { ActiveTabContext } from '../ActiveTabContext';
 import { useTheme } from '@mui/material/styles';
 
@@ -25,6 +26,7 @@ function MainContent() {
       {/* Conditional rendering based on activeTab */}
       {activeTab === 'home' && <Home />}
       {activeTab === 'mySkater' && <MySkater />}
+      {activeTab === 'skateParks' && <SkateParks />}
       {/* Add conditions for other components like Tournaments, Skate Parks, etc. */}
     </div>
   );
