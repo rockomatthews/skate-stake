@@ -36,8 +36,8 @@ function MySkater() {
   const fetchAssets = useCallback(async () => {
     if (!user) return;
     try {
-      // const response = await fetch(`http://localhost:3001/getUserAssets?email=${encodeURIComponent(user.email)}`);
-      const response = await fetch(`https://skate-stake.onrender.com/getUserAssets?email=${encodeURIComponent(user.email)}`);
+      const response = await fetch(`http://localhost:3001/getUserAssets?email=${encodeURIComponent(user.email)}`);
+      // const response = await fetch(`https://skate-stake.onrender.com/getUserAssets?email=${encodeURIComponent(user.email)}`);
       if (!response.ok) {
         throw new Error('Failed to fetch assets');
       }
@@ -58,8 +58,8 @@ function MySkater() {
     setIsCreatingAsset(true);
 
     try {
-    // const response = await fetch('http://localhost:3001/asset', {
-    const response = await fetch('https://skate-stake.onrender.com/asset', {
+    const response = await fetch('http://localhost:3001/asset', {
+    // const response = await fetch('https://skate-stake.onrender.com/asset', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: user.email, assetType: 'skater' }) // Include assetType
@@ -84,8 +84,8 @@ function MySkater() {
 
     try {
       const userEmail = user.email;
-      // const response = await fetch('http://localhost:3001/asset', {
-      const response = await fetch('https://skate-stake.onrender.com/asset', {
+      const response = await fetch('http://localhost:3001/asset', {
+      // const response = await fetch('https://skate-stake.onrender.com/asset', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: userEmail, assetType: 'skateboard' }) // Specify asset type
@@ -161,14 +161,24 @@ return (
         <Box sx={{ border: '1px solid white', maxWidth: '30%', minWidth: '200px', color: theme.palette.text.light }}>
           {asset.attributes.map((attr, idx) => (
             <Box key={idx} sx={{ marginBottom: '10px' }}>
-              <Typography variant="body1">{attr.traitType}: {attr.value}</Typography>
+               <Typography
+                  variant="body1"
+                  sx={{
+                    margin: '10px 20px 0px'
+                  }}
+                >
+                  {attr.traitType}: {attr.value}
+              </Typography>
               <LinearProgress 
                 variant="determinate" 
                 value={Number(attr.value)} 
                 sx={{
-                  height: 10, 
+                  height: 10,
+                  borderRadius: 4,
+                  margin: '0px 20px 10px',
                   backgroundColor: 'black', 
-                  '& .MuiLinearProgress-bar': { backgroundColor: theme.palette.primary.yellow },
+                  '& .MuiLinearProgress-bar': { 
+                      backgroundColor: theme.palette.primary.yellow },
                   border: '1px solid white'
                 }} 
               />
@@ -210,14 +220,24 @@ return (
           <Box sx={{ border: '1px solid white', maxWidth: '30%', minWidth: '200px', color: theme.palette.text.light }}>
             {asset.attributes.map((attr, idx) => (
               <Box key={idx} sx={{ marginBottom: '10px' }}>
-                <Typography variant="body1">{attr.traitType}: {attr.value}</Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    margin: '10px 20px 0px'
+                  }}
+                >
+                  {attr.traitType}: {attr.value}
+                </Typography>
                 <LinearProgress 
                   variant="determinate" 
                   value={Number(attr.value)} 
                   sx={{
-                    height: 10, 
+                    height: 10,
+                    borderRadius: 4,
+                    margin: '0px 20px 10px',
                     backgroundColor: 'black', 
-                    '& .MuiLinearProgress-bar': { backgroundColor: theme.palette.primary.yellow },
+                    '& .MuiLinearProgress-bar': { 
+                        backgroundColor: theme.palette.primary.yellow },
                     border: '1px solid white'
                   }} 
                 />

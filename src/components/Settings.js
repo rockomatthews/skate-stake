@@ -23,8 +23,8 @@ function Settings() {
         const fetchUserData = async () => {
             if (firebaseUserId) {
                 try {
-                    // const response = await fetch(`http://localhost:3001/getUserData?firebaseUserId=${firebaseUserId}`);
-                    const response = await fetch(`https://skate-stake.onrender.com/getUserData?firebaseUserId=${firebaseUserId}`);
+                    const response = await fetch(`http://localhost:3001/getUserData?firebaseUserId=${firebaseUserId}`);
+                    // const response = await fetch(`https://skate-stake.onrender.com/getUserData?firebaseUserId=${firebaseUserId}`);
                     if (!response.ok) {
                         throw new Error('Failed to fetch user data');
                     }
@@ -59,8 +59,8 @@ function Settings() {
                 // Debugging: Log to see if this part is reached with correct data
                 console.log("Uploading logo URL to server:", { firebaseUserId, logoUrl: url });
             
-                // const updateResponse = await fetch('http://localhost:3001/updateUserLogo', {
-                const updateResponse = await fetch('https://skate-stake.onrender.com/updateUserLogo', {
+                const updateResponse = await fetch('http://localhost:3001/updateUserLogo', {
+                // const updateResponse = await fetch('https://skate-stake.onrender.com/updateUserLogo', {
                 method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ firebaseUserId, logoUrl: url })
@@ -85,8 +85,8 @@ function Settings() {
     const handleSaveSettings = async () => {
         if (firebaseUserId) {
             try {
-                // const updateResponse = await fetch('http://localhost:3001/updateUserSettings', {
-                const updateResponse = await fetch('https://skate-stake.onrender.com/updateUserSettings', {
+                const updateResponse = await fetch('http://localhost:3001/updateUserSettings', {
+                // const updateResponse = await fetch('https://skate-stake.onrender.com/updateUserSettings', {
                 method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
