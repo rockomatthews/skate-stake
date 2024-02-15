@@ -91,7 +91,7 @@ function Header() {
     { text: 'Free Rides', icon: <LandscapeIcon />, onClick: () => console.log('Free Rides clicked') },
     { text: 'Tournaments', icon: <EventIcon />, onClick: () => console.log('Tournaments clicked') },
     { text: 'Play S-K-A-T-E', icon: <SkateboardingIcon />, onClick: () => console.log('Play S-K-A-T-E clicked') },
-    { text: 'Skate Parks', icon: <ParkIcon />, onClick: () => console.log('Skate Parks clicked') },
+    { text: 'Skate Parks', icon: <ParkIcon />, onClick: () => changeActiveTab('skateParks') },
     { text: 'Hospital', icon: <LocalHospitalIcon />, onClick: () => console.log('Hospital clicked') },
     { text: 'Mating', icon: <FavoriteIcon />, onClick: () => console.log('Mating clicked') },
     { text: 'Marketplace', icon: <StorefrontIcon />, onClick: () => console.log('Marketplace clicked') },
